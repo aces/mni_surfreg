@@ -1,0 +1,39 @@
+		Filename Conventions
+		--------------------
+
+.hpp = C++ header file that can be #included
+.cpp = implementation header for C++ template code
+       (not generally #included by user code)
+
+.cc  = C++ code compiled into a program or library
+
+
+
+
+		Documentation Conventions
+		-------------------------
+
+Borrowed from xengine:
+http://xengine.sourceforge.net/pdf/Programming%20Guidelines.pdf
+
+* All namespaces must have a brief and detailed description.
+
+* All classes that belong to the public interface must have a brief
+  and detailed description that is usually put right in front of the
+  class declaration in the header file. The brief descriptions must be
+  specified by using the \brief tag (because of a bug in doxygen).
+
+* All member functions that are part of the public interface of a
+  class must have a brief description in the header file. This can
+  either be put right in front of the method declaration or right
+  after it on the same line with a //!< comment. A detailed
+  description, if applicable, must be put just before the method
+  definition in the implementation file.
+
+* The documentation for public member variables or static class
+  variables may comprise only a brief description and need not have a
+  detailed description. Brief and detailed descriptions are either
+  just before the declaration or on the same line right after the
+  declaration of the variable. Note that public member variables
+  should not be used in general.
+

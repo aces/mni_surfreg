@@ -1,0 +1,7 @@
+* figure in doc for Facet_coordinate_frame.hpp
+
+* emit useful errors if trying to open a nonexistant
+  vtk file  (i.e. in surftracc)
+  or errors during write, e.g. surface-resample
+
+
