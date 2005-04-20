@@ -44,7 +44,7 @@ CGAL::Point_3<R> rotate( const CGAL::Point_3<R>& p,
 			 double cos_theta,
 			 double sin_theta )
 {
-    CGAL::Vector_3<R> r(p);
+    CGAL::Vector_3<R> r = p - CGAL::ORIGIN;
     CGAL::Vector_3<R> n( axis );
     
     n = n / sqrt(CGAL::to_double(n*n));
@@ -97,7 +97,7 @@ public:
 
     const CGAL::Point_3<R> operator()( const CGAL::Point_3<R>& p )
     {
-	CGAL::Vector_3<R> r(p);
+	CGAL::Vector_3<R> r = p - CGAL::ORIGIN;
 
 	return CGAL::ORIGIN 
 	    + r * cos_theta
