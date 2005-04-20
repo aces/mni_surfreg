@@ -11,6 +11,14 @@
 #include <exception>
 #include <ParseArgv.h>
 
+/* File utility.h defines template class Quadruple<> which has
+ * "template < class U, class V, class W, class X>" methods.
+ * Unfortunately, the MNI volume_io library has a "#define X ..."
+ * which results in a compile error if utility.h is later included.
+ * To avoid this problem, we include it early.
+ */
+#include <CGAL/utility.h>
+
 #include <surflib/Statistic.hpp>
 
 #include <surflib/load_surface_file.hpp>
