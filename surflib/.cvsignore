@@ -1,0 +1,3 @@
+.deps
+.libs *.lo *.la
+Makefile Makefile.in

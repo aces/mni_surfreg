@@ -1,0 +1,8 @@
+.deps
+.libs
+Makefile Makefile.in
+initial-surface-map
+refine-surface-map
+sphere-register
+surface-data-term-1
+surftracc
