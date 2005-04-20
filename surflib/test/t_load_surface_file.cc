@@ -1,3 +1,4 @@
+#include <CGAL/utility.h>
 #include <surflib/load_surface_file.hpp>
 #include <surflib/surface_checking.hpp>
 
