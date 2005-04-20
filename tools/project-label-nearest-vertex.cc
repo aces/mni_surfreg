@@ -14,12 +14,12 @@
 
 #include <ParseArgv.h>
 
+#include <CGAL/Simple_cartesian.h>
+#include <CGAL/double.h>
+
 extern "C" {
 #   include <volume_io.h>
 }
-
-#include <CGAL/Simple_cartesian.h>
-#include <CGAL/double.h>
 
 #include <surflib/load_surface_file.hpp>
 
