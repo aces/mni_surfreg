@@ -1,0 +1,8 @@
+2005-04-19  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
+
+	* configure.ac: Set version to 0.2.
+
+	* tools/alpha-shape.cc: Change type of Point_map; key type is now
+	a pointer to the kernel's ring type.  Use &p.x() as hash key.
+	Obtain alpha range at each vertex from Alpha_status type.
+
