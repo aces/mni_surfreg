@@ -19,6 +19,7 @@
 
 #include <CGAL/Cartesian.h>
 #include <CGAL/MP_Float.h>
+#include <CGAL/Unique_hash_map.h>
 #include <CGAL/Polyhedron_3.h>
 #include <CGAL/Alpha_shape_vertex_base_3.h>
 #include <CGAL/Triangulation_cell_base_3.h>
@@ -72,22 +73,7 @@ typedef Surface::Vertex_handle       Vertex_handle;
 typedef Surface::Vertex_iterator     Vertex_iterator;
 
 typedef K::Point_3      Point_3;
-
-
-
-// Define mapping from Point_3 to a vertex handle
-//
-struct Point_compare
-{
-    bool operator() ( const Point_3& h1, const Point_3& h2 )
-    {
-	return h1.Ptr() < h2.Ptr();
-    }
-};
-
-typedef std::map<Point_3,Vertex_handle,Point_compare>  Point_map;
-
-
+typedef CGAL::Unique_hash_map<const K::RT*,Vertex_handle> Point_map;
 
 
 using namespace std;
@@ -112,7 +98,7 @@ void classify_vertices( Surface& s,
     Point_map point_to_vertex;
     Vertex_iterator v = s.vertices_begin();
     CGAL_For_all( v, s.vertices_end() ) {
-        point_to_vertex[v->point()] = v;
+        point_to_vertex[& v->point().x()] = v;
     }
     
     cout << "Creating alpha shape ..." << flush;
@@ -135,12 +121,18 @@ void classify_vertices( Surface& s,
     Triangulation_3::Finite_vertices_iterator 
 	vi = shape.finite_vertices_begin();
     CGAL_For_all( vi, shape.finite_vertices_end() ) {
-	CGAL_assertion( point_to_vertex.find(vi->point()) 
-			!= point_to_vertex.end() );
-	Surface::Vertex_handle v = point_to_vertex[vi->point()];
+	CGAL_assertion( point_to_vertex.is_defined( & vi->point().x() ) );
+	Surface::Vertex_handle v = point_to_vertex[ & vi->point().x() ];
+	CGAL_assertion( v != point_to_vertex.default_value() );
 
-	v->low  = CGAL::to_double(vi->get_range().first);
-	v->high = CGAL::to_double(vi->get_range().second);
+	Alpha_shape_3::Alpha_status* as = vi->get_alpha_status();
+
+	v->low  = CGAL::to_double( as->alpha_mid() );
+
+	if ( as->is_on_chull() )
+	    v->high = -1;
+	else
+	    v->high = CGAL::to_double( as->alpha_max() );
 
 	if (classify)
 	    v->label = shape.classify(vi,alpha);
