@@ -24,9 +24,17 @@ set -e
 
 PATH=xBINDIRx:$PATH
 
+dist_trans_extra_vert=5
+while [ -n "$1" ]; do
+    case "$1" in
+      -dt_extra) dist_trans_extra_vert=$2; shift 2;;
+      *) break;
+    esac
+done
 
 if [ $# -ne 2 ]; then
-    echo >&2 "usage: $0 cortex.obj output.vv"
+    echo >&2 "usage: $0 [options] cortex.obj output.vv"
+    echo >&2 "  -dt_extra N   extra vertices in final distance transform"
     exit 1
 fi
 
@@ -67,4 +75,4 @@ cat -n $ch_dt | join $tmp_seed - | \
 
 # Compute distance transform from seed vertices.
 #
-surface-distance-transform -extra 5 $obj $seed $out
+surface-distance-transform -extra $dist_trans_extra_vert $obj $seed $out
