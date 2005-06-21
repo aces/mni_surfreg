@@ -58,8 +58,8 @@ sub generate_initial_map {
 sub register {
     my( $f, $map_in ) = @_;
     my $map_out = $TmpDir . "map_reg_" . $f . ".sm";
-    Spawn(['surftracc', 
-	   $model{81920},$source, 
+    Spawn(['surftracc',
+	   $model{81920},$source,
 	   $model{81920},$target,
 	   $model{$f},
 	   $map_in, $map_out]);
@@ -69,7 +69,7 @@ sub register {
 sub refine {
     my( $f, $map_in ) = @_;
     my $map_out = $TmpDir . "map_ref_" . $f . ".sm";
-    Spawn(['refine-surface-map', 
+    Spawn(['refine-surface-map',
 	   $map_in, $model{$f}, $model{81920}, $map_out]);
     return $map_out;
 }

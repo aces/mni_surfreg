@@ -216,12 +216,19 @@ int main( int ac, char* av[] )
 	CGAL_For_all(v,s1.vertices_end())
 	    vv << v->scalar << endl;
 
-    } catch ( const std::exception& e ) {
- 	std::cerr << "std::exception: " << e.what() << std::endl;
-	return 1;
-    } catch ( ... ) {
-	std::cerr << "Yikes!  Unknown exception!!" << std::endl;
+    } catch ( const std::bad_alloc& e ) {
+	std::cerr << "Failed a memory allocation." << "\n"
+		  << "No output." << "\n";
 	return 2;
+    } catch ( const std::exception& e ) {
+	std::cerr << "Error: " << e.what() << "\n"
+		  << "No output." << "\n";
+        return 3;
+    } catch ( ... ) {
+	std::cerr << "Unknown exception." << "\n"
+		  << "No output." << "\n"
+		  << "This is likely bug in the code: please report!" << "\n";
+        return 4;
     }
 
     return 0;

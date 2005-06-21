@@ -1,0 +1,7 @@
+		New in Version 0.3
+
+* surface-distance-transform-1 has a new option -dt_extra
+This is useful for reducing the memory consumption when computing
+for a surface with a large number of triangles.
+
+* better diagnostics for all executables

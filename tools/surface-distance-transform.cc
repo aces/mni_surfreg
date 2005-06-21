@@ -127,45 +127,61 @@ int main( int ac, char* av[] )
         return 1;
     }
 
-    Surface s;
-    MNI::load_surface_with_scalar( s, av[1], av[2] );
+    try {
+	Surface s;
+	MNI::load_surface_with_scalar( s, av[1], av[2] );
 
 
-    // Generate list of all seed vertices: those with
-    // nonzero scalar value.
-    //
-    std::vector<Vertex_handle> seed_list;
+	// Generate list of all seed vertices: those with
+	// nonzero scalar value.
+	//
+	std::vector<Vertex_handle> seed_list;
 
-    Surface::Vertex_iterator v = s.vertices_begin();
-    CGAL_For_all( v, s.vertices_end() ) {
-	if ( (seed_label == -1 && v->scalar) ||
-	     (seed_label == v->scalar) )
-	    seed_list.push_back(v);
-    }
+	Surface::Vertex_iterator v = s.vertices_begin();
+	CGAL_For_all( v, s.vertices_end() ) {
+	    if ( (seed_label == -1 && v->scalar) ||
+		 (seed_label == v->scalar) )
+		seed_list.push_back(v);
+	}
 
-    cout << seed_list.size() << " seed vertices." << endl;
-    compute_distance(s,seed_list,extra_nodes_per_edge);
+	cout << seed_list.size() << " seed vertices." << endl;
+	compute_distance(s,seed_list,extra_nodes_per_edge);
 
-    if ( vtk_file ) {
-	// Write in VTK format.
-	// Note: assuming that write_vtk() outputs vertices
-	// in order [vertices_begin,vertices_end).
-	std::ofstream out( vtk_file );
-	MNI::write_vtk( out, s, 
-			"Distance transform" );
-	out << "POINT_DATA " << s.size_of_vertices() << std::endl
-	    << "SCALARS depth double" << std::endl
-	    << "LOOKUP_TABLE default" << std::endl;
-	for( Surface::Vertex_iterator v = s.vertices_begin();
-	     v != s.vertices_end(); ++v )
+	if ( vtk_file ) {
+	    // Write in VTK format.
+	    // Note: assuming that write_vtk() outputs vertices
+	    // in order [vertices_begin,vertices_end).
+	    std::ofstream out( vtk_file );
+	    MNI::write_vtk( out, s, 
+			    "Distance transform" );
+	    out << "POINT_DATA " << s.size_of_vertices() << std::endl
+		<< "SCALARS depth double" << std::endl
+		<< "LOOKUP_TABLE default" << std::endl;
+	    for( Surface::Vertex_iterator v = s.vertices_begin();
+		 v != s.vertices_end(); ++v )
+		out << v->scalar << std::endl;
+	}
+
+	// Dump values to file in vertex order.
+	std::ofstream out( av[3] );
+	v = s.vertices_begin();
+	CGAL_For_all( v, s.vertices_end() ) {
 	    out << v->scalar << std::endl;
-    }
+	}
 
-    // Dump values to file in vertex order.
-    std::ofstream out( av[3] );
-    v = s.vertices_begin();
-    CGAL_For_all( v, s.vertices_end() ) {
-	out << v->scalar << std::endl;
+    } catch ( const std::bad_alloc& e ) {
+	std::cerr << "Failed a memory allocation." << "\n"
+		  << "No output." << "\n";
+	return 2;
+    } catch ( const std::exception& e ) {
+	std::cerr << "Error: " << e.what() << "\n"
+		  << "No output." << "\n";
+        return 3;
+    } catch ( ... ) {
+	std::cerr << "Unknown exception." << "\n"
+		  << "No output." << "\n"
+		  << "This is likely bug in the code: please report!" << "\n";
+        return 4;
     }
 
     return 0;

@@ -145,57 +145,18 @@ void classify_vertices( Surface& s,
 }
 
 
-void usage( char* argv0 )
+
+void process( char* input_file, 
+	      char* vtk_file,
+	      char* vv_file,
+	      double alpha,
+	      int optimal_alpha )
 {
-    char* s = strrchr( argv0, '/' );
-    std::cerr << "usage: " << (s ? s+1 : argv0) << " [options] input"
-	      << std::endl;
-}
-
-
-int main( int ac, char* av[] )
-{
-    char* vtk_file = 0;
-    char* vv_file = 0;  /* vertex values */
-
-    double alpha = -1;
-    int optimal_alpha = 0;
-
-    ArgvInfo argTable[] = {
-	{ "-alpha", ARGV_FLOAT, (char*)1, (char*)&alpha,
-	  "specify alpha value used to classify each vertex" },
-	{ "-opt_alpha", ARGV_CONSTANT, (char*)1, (char*)&optimal_alpha,
-	  "compute optimal alpha and classify vertices using it" },
-	{ "-vtk", ARGV_STRING, (char*)1, (char*)&vtk_file,
-	  "write output in VTK format" },
-	{ "-vv", ARGV_STRING, (char*)1, (char*)&vv_file,
-	  "write depth values in file, one per line" },
-	{ NULL, ARGV_END, NULL, NULL, NULL }
-    };
-
-
-    if ( ParseArgv( &ac, av, argTable, 0 ) || ac != 2 ) {
-        usage( av[0] );
-        return 1;
-    }
-    if ( optimal_alpha && (alpha > 0) ) {
-	cerr << "Ignoring -alpha when -opt_alpha specified." << endl;
-	alpha = -1;
-    }
     bool classify = optimal_alpha || (alpha > 0);
 
     Surface s;
 
-    try {
-	MNI::load_surface_file( s, av[1] );
-    } catch ( const std::exception& e ) {
- 	std::cerr << "std::exception: " << e.what() << std::endl;
-	return 1;
-    } catch ( ... ) {
-	std::cerr << "Yikes!  Unknown exception!!" << endl;
-	return 4;
-    }
-
+    MNI::load_surface_file( s, input_file );
     classify_vertices( s, classify, alpha );
 
     if ( vtk_file ) {
@@ -237,6 +198,67 @@ int main( int ac, char* av[] )
 		<< " " << v->low 
 		<< " " << v->high
 		<< std::endl;
+    }
+}
+
+
+void usage( char* argv0 )
+{
+    char* s = strrchr( argv0, '/' );
+    std::cerr << "usage: " << (s ? s+1 : argv0) << " [options] input"
+	      << std::endl;
+}
+
+
+int main( int ac, char* av[] )
+{
+    char* vtk_file = 0;
+    char* vv_file = 0;  /* vertex values */
+
+    double alpha = -1;
+    int optimal_alpha = 0;
+
+    ArgvInfo argTable[] = {
+	{ "-alpha", ARGV_FLOAT, (char*)1, (char*)&alpha,
+	  "specify alpha value used to classify each vertex" },
+	{ "-opt_alpha", ARGV_CONSTANT, (char*)1, (char*)&optimal_alpha,
+	  "compute optimal alpha and classify vertices using it" },
+	{ "-vtk", ARGV_STRING, (char*)1, (char*)&vtk_file,
+	  "write output in VTK format" },
+	{ "-vv", ARGV_STRING, (char*)1, (char*)&vv_file,
+	  "write depth values in file, one per line" },
+	{ NULL, ARGV_END, NULL, NULL, NULL }
+    };
+
+
+    if ( ParseArgv( &ac, av, argTable, 0 ) || ac != 2 ) {
+        usage( av[0] );
+        return 1;
+    }
+    if ( optimal_alpha && (alpha > 0) ) {
+	cerr << "Ignoring -alpha when -opt_alpha specified." << endl;
+	alpha = -1;
+    }
+    if ( !optimal_alpha && vtk_file == 0 && vv_file == 0 ) {
+	cerr << "Specify one of -opt_alpha, -vtk, or -vv for output.\n";
+	return 1;
+    }
+
+    try {
+	process( av[1], vtk_file, vv_file, alpha, optimal_alpha );
+    } catch ( const std::bad_alloc& e ) {
+	std::cerr << "Failed a memory allocation." << "\n"
+		  << "No output." << "\n";
+	return 2;
+    } catch ( const std::exception& e ) {
+	std::cerr << "Error: " << e.what() << "\n"
+		  << "No output." << "\n";
+        return 3;
+    } catch ( ... ) {
+	std::cerr << "Unknown exception." << "\n"
+		  << "No output." << "\n"
+		  << "This is likely bug in the code: please report!" << "\n";
+        return 4;
     }
 
     return 0;

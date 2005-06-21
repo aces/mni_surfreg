@@ -8,24 +8,25 @@ namespace MNI {
 
 
 VTKFile::VTKFile( const char* filename )
-    : FileReader(file), file(filename)
+    : FileReader( file ), file( filename )
 {
-    if (!file)
-	throw std::runtime_error("failed to open file");
-    file.exceptions( ifstream::failbit | ifstream::badbit );
-    read_header();
+    initialize( filename );
 }
-
 
 VTKFile::VTKFile( const std::string filename )
     : FileReader(file), file(filename.c_str())
 {
-    if (!file)
-	throw std::runtime_error("failed to open file");
+    initialize( filename );
+}
+
+void VTKFile::initialize( const std::string& filename )
+{
+    if ( !file )
+	throw std::runtime_error( "failed to read VTK file [" 
+				  + filename + "]" );
     file.exceptions( ifstream::failbit | ifstream::badbit );
     read_header();
 }
-
 
 void VTKFile::read_header()
 {
@@ -39,7 +40,8 @@ void VTKFile::read_header()
 	binary_flag = false;
     else if ( s == "BINARY" )
 	binary_flag = true;
-    else throw FileReaderException( "bad format string: " + s );
+    else throw FileReaderException( "bad format string [" + s 
+				    + "].  Expected ASCII or BINARY." );
 
     n_point = n_cell = 0;
     state = Header;

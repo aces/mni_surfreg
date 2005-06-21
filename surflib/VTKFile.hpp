@@ -151,6 +151,7 @@ private:
     enum FileState { Header, Geometry, PointData, CellData };
     FileState state;
 
+    void initialize( const std::string& filename );
     void enter_state_geometry();
     void enter_state_point_data();
     //TODO: void enter_state_cell_data();

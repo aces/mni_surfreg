@@ -104,20 +104,6 @@ struct vertex_label
 };
 
 
-/* Read label for each vertex of s.
- */
-void read_labels( Surface& s, 
-		  char* vv_filename )
-{
-    std::ifstream in( vv_filename );
-
-    Surface::Vertex_iterator v = s.vertices_begin();
-    CGAL_For_all( v, s.vertices_end() ) {
-	in >> v->label;
-    }
-}
-
-
 void write_labels( Surface& s, 
 		   char* vv_filename )
 {
@@ -143,12 +129,27 @@ int main( int ac, char* av[] )
         return 1;
     }
 
-    Surface s;
-    MNI::load_surface_file( s, av[1] );
+    try {
+	Surface s;
+	MNI::load_surface_with_scalar( s, av[1], av[2] );
+	compute_components(s);
+	write_labels( s, av[3] );
 
-    read_labels( s, av[2] );
-    compute_components(s);
-    write_labels( s, av[3] );
+    } catch ( const std::bad_alloc& e ) {
+	std::cerr << "Failed a memory allocation." << "\n"
+		  << "No output." << "\n";
+	return 2;
+    } catch ( const std::exception& e ) {
+	std::cerr << "Error: " << e.what() << "\n"
+		  << "No output." << "\n";
+        return 3;
+    } catch ( ... ) {
+	std::cerr << "Unknown exception." << "\n"
+		  << "No output." << "\n"
+		  << "This is likely bug in the code: please report!" << "\n";
+        return 4;
+    }
 
+    
     return 0;
 }

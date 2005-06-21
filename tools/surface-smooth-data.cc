@@ -79,37 +79,45 @@ int main( int ac, char* av[] )
 	MNI::SetScalarValues<Surface> ssv(s);
 	vtk.read_scalar_point_attribute(ssv);
 
+
+	double a = atof( av[3] );
+	int r = 1;
+	if ( ac == 5 )
+	    r = atoi( av[4] );
+	if ( r <= 0 ) {
+	    cerr << "Number of repeats must be positive.  r = " << r << endl;
+	    return 1;
+	}
+
+	cout << r << " repetitions of smoothing with a = " << a << endl;
+
+	while( --r >= 0 ) 
+	    smooth_scalars(s,a);
+
+	std::ofstream out( av[2] );
+	MNI::write_vtk( out, s, std::string("smooth-scalars ") 
+			+ av[1] + " " + av[2] + " " + av[3] );
+	out << "POINT_DATA " << s.size_of_vertices() << std::endl
+	    << "SCALARS data double" << std::endl
+	    << "LOOKUP_TABLE default" << std::endl;
+	for( Vertex_iterator v = s.vertices_begin();
+	     v != s.vertices_end(); ++v )
+	    out << v->scalar << std::endl;
+
+    } catch ( const std::bad_alloc& e ) {
+	std::cerr << "Failed a memory allocation." << "\n"
+		  << "No output." << "\n";
+	return 2;
     } catch ( const std::exception& e ) {
- 	std::cerr << "std::exception: " << e.what() << std::endl;
-	return 1;
+	std::cerr << "Error: " << e.what() << "\n"
+		  << "No output." << "\n";
+        return 3;
     } catch ( ... ) {
-	std::cerr << "Yikes!  Unknown exception!!" << endl;
-	return 4;
+	std::cerr << "Unknown exception." << "\n"
+		  << "No output." << "\n"
+		  << "This is likely bug in the code: please report!" << "\n";
+        return 4;
     }
-
-    double a = atof( av[3] );
-    int r = 1;
-    if ( ac == 5 )
-	r = atoi( av[4] );
-    if ( r <= 0 ) {
-	cerr << "Number of repeats must be positive.  r = " << r << endl;
-	return 1;
-    }
-
-    cout << r << " repetitions of smoothing with a = " << a << endl;
-
-    while( --r >= 0 ) 
-	smooth_scalars(s,a);
-
-    std::ofstream out( av[2] );
-    MNI::write_vtk( out, s, std::string("smooth-scalars ") 
-		    + av[1] + " " + av[2] + " " + av[3] );
-    out << "POINT_DATA " << s.size_of_vertices() << std::endl
-	<< "SCALARS data double" << std::endl
-	<< "LOOKUP_TABLE default" << std::endl;
-    for( Vertex_iterator v = s.vertices_begin();
-	 v != s.vertices_end(); ++v )
-	out << v->scalar << std::endl;
 
     return 0;
 }

@@ -413,12 +413,19 @@ int main( int ac, char* av[] )
 	std::ofstream map_out( av[7] );
 	MNI::write_surface_map( map_out, smap );
 
+    } catch ( const std::bad_alloc& e ) {
+	std::cerr << "Failed a memory allocation." << "\n"
+		  << "No output." << "\n";
+	return 2;
     } catch ( const std::exception& e ) {
- 	std::cerr << "std::exception: " << e.what() << std::endl;
-	return 1;
+	std::cerr << "Error: " << e.what() << "\n"
+		  << "No output." << "\n";
+        return 3;
     } catch ( ... ) {
-	std::cerr << "Yikes!  Unknown exception!!" << endl;
-	return 4;
+	std::cerr << "Unknown exception." << "\n"
+		  << "No output." << "\n"
+		  << "This is likely bug in the code: please report!" << "\n";
+        return 4;
     }
 
     return 0;

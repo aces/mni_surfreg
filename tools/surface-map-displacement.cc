@@ -158,49 +158,55 @@ int main( int ac, char* av[] )
     try {
 	MNI::load_surface_file( source, av[1] );
 	MNI::load_surface_file( target, av[2] );
-    } catch ( const std::exception& e ) {
-        cerr << "Error: " << e.what() << endl;
-        return 1;
-    } catch ( ... ) {
-        cerr << "Unknown exception." << endl
-             << "Most likely, this is a bug in the code.  Please report!"
-             << endl;
-        return 2;
-    }
+	
+	SMap* map_p;
+	if ( ac == 3 ) {
+	    map_p = new SMap(source,target);
+	    cout << "Using vertex-identity map." << endl;
+	} else {
+	    cout << "1: " << av[3] << endl;
+	    map_p = new SMap(source,target,av[3]);
+	}
 
-    SMap* map_p;
-    if ( ac == 3 ) {
-	map_p = new SMap(source,target);
-	cout << "Using vertex-identity map." << endl;
-    } else {
-	cout << "1: " << av[3] << endl;
-	map_p = new SMap(source,target,av[3]);
-    }
-
-    double N = 1;
-    std::vector<Vector_3> displacement( source.size_of_vertices(),
-					CGAL::NULL_VECTOR );
-    add_displacements( *map_p, displacement );
-
-    for( int i = 4; i < ac; ++i ) {
-	++N;
-	cout << N << ": " << av[i] << endl;
-	delete map_p;
-	map_p = new SMap(source,target,av[i]);
+	double N = 1;
+	std::vector<Vector_3> displacement( source.size_of_vertices(),
+					    CGAL::NULL_VECTOR );
 	add_displacements( *map_p, displacement );
+
+	for( int i = 4; i < ac; ++i ) {
+	    ++N;
+	    cout << N << ": " << av[i] << endl;
+	    delete map_p;
+	    map_p = new SMap(source,target,av[i]);
+	    add_displacements( *map_p, displacement );
+	}
+
+	cout << "Read " << N << " surface map file"
+	     << (N == 1 ? "." : "s.") << endl;
+	scale_displacements( displacement, 1.0/N );
+
+	if (vv_file)
+	    write_vv( vv_file, displacement,
+		      write_scalar, write_vector );
+
+	if (vtk_file)
+	    write_mesh( vtk_file, source, displacement,
+			write_scalar, write_vector );
+
+        } catch ( const std::bad_alloc& e ) {
+	std::cerr << "Failed a memory allocation." << "\n"
+		  << "No output." << "\n";
+	return 2;
+    } catch ( const std::exception& e ) {
+	std::cerr << "Error: " << e.what() << "\n"
+		  << "No output." << "\n";
+        return 3;
+    } catch ( ... ) {
+	std::cerr << "Unknown exception." << "\n"
+		  << "No output." << "\n"
+		  << "This is likely bug in the code: please report!" << "\n";
+        return 4;
     }
-
-    cout << "Read " << N << " surface map file"
-	 << (N == 1 ? "." : "s.") << endl;
-    scale_displacements( displacement, 1.0/N );
-
-    if (vv_file)
-	write_vv( vv_file, displacement,
-		  write_scalar, write_vector );
-
-    if (vtk_file)
-	write_mesh( vtk_file, source, displacement,
-		    write_scalar, write_vector );
 
     return 0;
 }

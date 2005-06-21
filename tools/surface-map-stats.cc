@@ -151,14 +151,19 @@ int main( int ac, char* av[] )
 	if (proc_flipped)
 	    process_flipped_triangles( smap, area_file );
 
+    } catch ( const std::bad_alloc& e ) {
+	std::cerr << "Failed a memory allocation." << "\n"
+		  << "No output." << "\n";
+	return 2;
     } catch ( const std::exception& e ) {
-        cerr << "Error: " << e.what() << endl;
-        return 1;
+	std::cerr << "Error: " << e.what() << "\n"
+		  << "No output." << "\n";
+        return 3;
     } catch ( ... ) {
-        cerr << "Unknown exception." << endl
-             << "Most likely, this is a bug in the code.  Please report!"
-             << endl;
-        return 2;
+	std::cerr << "Unknown exception." << "\n"
+		  << "No output." << "\n"
+		  << "This is likely bug in the code: please report!" << "\n";
+        return 4;
     }
 
     return 0;

@@ -17,24 +17,46 @@ typedef Surface_kernel::Point_3             Point_3;
 typedef MNI::SurfaceMap_hash<Surface>       SurfaceMap;
 
 
+void process( char* control_fn,
+	      char* target_fn,
+	      char* output_fn )
+{
+    Surface control;
+    MNI::load_surface_file( control, control_fn );
+
+    Surface target;
+    MNI::load_surface_file( target, target_fn );
+
+    SurfaceMap sm( control, target );
+    std::ofstream os( output_fn );
+    MNI::write_surface_map( os, sm );
+}
+
 
 int main( int ac, char* av[] )
 {
     if ( ac != 4 ) {
 	std::cerr << "usage: " << av[0] << " control target output" 
-		  << std::endl;
+		  << "\n";
 	return 1;
     }
 
-    Surface control;
-    MNI::load_surface_file( control, av[1] );
-
-    Surface target;
-    MNI::load_surface_file( target, av[2] );
-
-    SurfaceMap sm( control, target );
-    std::ofstream os( av[3] );
-    MNI::write_surface_map( os, sm );
+    try {
+	process( av[1], av[2], av[3] );
+    } catch ( const std::bad_alloc& e ) {
+	std::cerr << "Failed a memory allocation." << "\n"
+		  << "No output." << "\n";
+	return 2;
+    } catch ( const std::exception& e ) {
+	std::cerr << "Error: " << e.what() << "\n"
+		  << "No output." << "\n";
+        return 3;
+    } catch ( ... ) {
+	std::cerr << "Unknown exception." << "\n"
+		  << "No output." << "\n"
+		  << "This is likely bug in the code: please report!" << "\n";
+        return 4;
+    }
 
     return 0;
 }

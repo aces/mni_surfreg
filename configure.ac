@@ -1,4 +1,4 @@
-AC_INIT([MNI SurfReg],[0.2])
+AC_INIT([MNI SurfReg],[0.3])
 AC_CONFIG_SRCDIR([surflib/SurfaceMapBase.hpp])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS([config.h])

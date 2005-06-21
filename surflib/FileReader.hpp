@@ -21,13 +21,13 @@ class FileReader
 
 public:
     
-    FileReader( std::istream& in_file ) : in(in_file) 
+    FileReader( std::istream& in_file ) : in( in_file )
     { 
 	skip_comments = false; 
     }
 
     FileReader( std::istream& in_file, 
-		const std::string& comment_prefix ) : in(in_file) 
+		const std::string& comment_prefix ) : in( in_file )
     {
 	skip_comment_lines( comment_prefix );
     }
@@ -44,15 +44,16 @@ public:
 	std::string s;
 	in >> s;
 	if ( s != word )
-	    throw FileReaderException( "expected '" + word + 
-				       "', got '" + s + "'" );
+	    throw FileReaderException( "expected [" + word
+				       + "], got [" + s + "]" );
     }
 
     void expect_line( std::string line ) 
     {
 	std::string s = expect_line();
 	if ( s != line )
-	    throw FileReaderException( "expected " + line + ", got " + s );
+	    throw FileReaderException( "expected [" + line 
+				       + "], got [" + s + "]" );
     }
 
     // FIXME: add error checking.
@@ -69,8 +70,8 @@ public:
 	std::string s;
 	do {
 	    std::getline( in, s );
-	} while (skip_comments && 
-		 s.substr( 0, comment_prefix.length() ) == comment_prefix);
+	} while ( skip_comments && 
+		  s.substr( 0, comment_prefix.length() ) == comment_prefix );
 	return s;
     }
 

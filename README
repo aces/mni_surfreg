@@ -55,6 +55,14 @@ generated in the following manner
 This reads the file "surface_A.obj" and generates the output
 in a new file "surface_A.vv".  
 
+The final step in computing the surface data term is a distance
+transform from the "seed" vertices along the gyrii.  This computation
+uses an approximation that depends on inserting a number of extra
+vertices along each mesh edge.  The default (5 extra vertices) was
+chosen for use with 80k polygons.  For larger polygons, you may need
+to reduce this number or face running out of memory.  Use the option
+"-dt_extra"; e.g. "-dt_extra 3" for a 320k polygon.
+
 NB:  This data-term computation uses parameter values that were selected 
      for working on the inner surface, i.e., the white/gray interface.
      These values may not produce acceptable results on the outer

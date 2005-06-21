@@ -1,3 +1,37 @@
+2005-06-21  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
+
+	* configure.ac: Set version to 0.3.
+
+	* registration/surface-data-term-1.sh: New option -dt_extra.
+
+	* surflib/FileReader.hpp: Improve exception messages.
+
+	* surflib/VTKFile.hpp
+	* surflib/src/VTKFile.cc: Unify constructors and improve
+	initialization-time exception messages.
+
+	* tools/label-connected-regions (read_labels): Remove.  Use
+	MNI::load_surface_with_scalar() rather than
+	MNI::load_surface_file() and read_labels().
+
+	* registration/initial-surface-map.cc (main):
+	* registration/refine-surface-map.cc (main):
+	* registration/surftracc.cc (main):
+	* tools/alpha-shape.cc (main):
+	* tools/evaluate-between-surfaces.cc (main):
+	* tools/label-connected-regions.cc (main):
+	* tools/project-label-nearest-vertex.cc (main):
+	* tools/surface-average.cc (main):
+	* tools/surface-curvature.cc (main):
+	* tools/surface-distance-transform.cc (main):
+	* tools/surface-map-check.cc (main):
+	* tools/surface-map-displacement.cc (main):
+	* tools/surface-map-stats.cc (main):
+	* tools/surface-resample.cc (main):
+	* tools/surface-smooth-data.cc (main):
+	* tools/surface-stats.cc (main): Surround body of main() with
+	try/catch block and report message from exception, if generated.
+
 2005-04-19  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
 
 	* configure.ac: Set version to 0.2.
