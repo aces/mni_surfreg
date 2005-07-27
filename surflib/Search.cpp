@@ -72,10 +72,10 @@ find_midpoint_on_sphere( const Point_s<Surface_>& p,
     double cos_theta = vp*vq;
 
     typename Surface_::Point_3 mid_3 
-	= MNI::rotate( p.point(),                   // point to rotate
-		       CGAL::cross_product(vp,vq),  // axis
-		       acos(cos_theta)/2.0          // rotation angle
-		       );
+	= rotate( p.point(),                   // point to rotate
+		  CGAL::cross_product(vp,vq),  // axis
+		  acos(cos_theta)/2.0          // rotation angle
+		  );
 
     // 2. Find mid_s = target mesh vertex nearest to mid_3.
     //
