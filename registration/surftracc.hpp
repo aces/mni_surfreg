@@ -87,6 +87,7 @@ class NeighbourhoodCentre
 {
 public:
     virtual const Vector_3 operator()( ControlMesh::Vertex_const_handle ) = 0;
+    virtual ~NeighbourhoodCentre() {}
 };
 
 void smooth_map( SurfaceMap& smap, 
