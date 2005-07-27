@@ -1,3 +1,17 @@
+2005-07-26  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
+
+	* configure.ac: Set version to 0.4.
+
+	* registration/surftracc.hpp: 
+	* surflib/Search.cpp: 
+	* surflib/ShortestPathQuery.cpp: 
+	* surflib/ShortestPathQuery.hpp:
+	* surflib/SurfaceMap.hpp:
+	* surflib/SurfaceMap_hash.hpp:
+	* surflib/SurfaceMap_hds.cpp:
+	* surflib/SurfaceMap_poly.cpp:
+	* surflib/surface_checking.hpp: Small fixes required for GCC 4.
+
 2005-06-21  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
 
 	* configure.ac: Set version to 0.3.
