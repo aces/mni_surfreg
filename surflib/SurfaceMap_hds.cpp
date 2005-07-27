@@ -16,13 +16,13 @@ template <class SourceMesh_,class TargetMesh_>
 void MNI::SurfaceMap_hds<SourceMesh_,TargetMesh_>::initialize_as_identity()
 {
     CGAL_precondition( control.size_of_vertices() > 0 );
-    CGAL_precondition( control.size_of_vertices() <= source.size_of_vertices() );
-    CGAL_precondition( target.size_of_vertices() > 0 );
+    CGAL_precondition( control.size_of_vertices() <= this->source.size_of_vertices() );
+    CGAL_precondition( this->target.size_of_vertices() > 0 );
     
     typename ControlMesh::Vertex_iterator       vc = control.vertices_begin();
-    typename SourceMesh::Vertex_const_iterator 	vs = source.vertices_begin();
+    typename SourceMesh::Vertex_const_iterator 	vs = this->source.vertices_begin();
     CGAL::Circulator_from_iterator<typename TargetMesh::Vertex_const_iterator> 
-	vt( target.vertices_begin(), target.vertices_end() );
+	vt( this->target.vertices_begin(), this->target.vertices_end() );
     
     CGAL_For_all( vc, control.vertices_end() ) {
 	vc->source_handle = vs;

@@ -42,12 +42,12 @@ public:
 	: MNI::SurfaceMapBase<SourceMesh,TargetMesh>( source_surf, 
 						      target_surf )
     {
-	CGAL_assertion( target.size_of_vertices() > 0 );
-	typename SourceMesh::Vertex_const_iterator s = source.vertices_begin();
+	CGAL_assertion( this->target.size_of_vertices() > 0 );
+	typename SourceMesh::Vertex_const_iterator s = this->source.vertices_begin();
 	CGAL::Circulator_from_iterator<typename TargetMesh::Vertex_const_iterator> 
-	    t( target.vertices_begin(), target.vertices_end() );
+	    t( this->target.vertices_begin(), this->target.vertices_end() );
 
-	while( s != source.vertices_end() ) {
+	while( s != this->source.vertices_end() ) {
 	    (*this)[s] = Point_s(&*t);
 	    ++s;
 	    ++t;
@@ -94,7 +94,7 @@ public:
     /*! Access to the polyhedral surface structures.
      */
     const SourceMesh& control_mesh() const
-    { return source; }
+    { return this->source; }
 
 
 private:

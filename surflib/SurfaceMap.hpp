@@ -67,12 +67,12 @@ public:
 	if ( this == &s )
 	    return *this;
 
-	CGAL_precondition( &source == &s.source );
-	CGAL_precondition( &target == &s.target );
+	CGAL_precondition( &this->source == &s.source );
+	CGAL_precondition( &this->target == &s.target );
 
 	//vertex_map = s.vertex_map;
-	Vertex_const_iterator v = source.vertices_begin();
-	CGAL_For_all( v,source.vertices_end() )
+	Vertex_const_iterator v = this->source.vertices_begin();
+	CGAL_For_all( v,this->source.vertices_end() )
 	    (*this)[v] = s[v];
 
 	return *this;
