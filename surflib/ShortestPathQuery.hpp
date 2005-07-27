@@ -125,7 +125,6 @@ private:
     void set_terminal_point( vertex_descriptor v, const Point_s& p );
     
     class FoundTarget {};
-    static int dummy;
 
     struct my_visitor 
     {
@@ -135,17 +134,6 @@ private:
 	int& visit_count;
 	my_visitor( vertex_descriptor target, int& vc )
 	    : t(target),visit_count(vc) {}
-
-#if 0
-	// This was needed to placate the MIPSpro compiler.
-	// Boost has since been updated, so can remove when new boost installed.
-	// (also remove static int dummy, above)
-	my_visitor() : t(-1),visit_count(dummy) 
-	{
-	    // Make sure it is not used.
-	    CGAL_assertion(0);
-	}
-#endif
 
 	void operator()( vertex_descriptor v, const Graph& g )
 	{  ++visit_count;  if ( v == t )    throw FoundTarget();  }
