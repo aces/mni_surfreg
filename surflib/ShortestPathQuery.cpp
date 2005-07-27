@@ -4,6 +4,7 @@
 #include <surflib/vtk_ostream.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 
+using namespace std;
 
 namespace MNI {
 
