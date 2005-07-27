@@ -4,6 +4,7 @@
 #include <cmath>
 #include <exception>
 #include <CGAL/circulator.h>
+#include <CGAL/squared_distance_3.h>
 
 namespace MNI {
 
