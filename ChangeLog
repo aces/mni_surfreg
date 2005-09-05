@@ -1,3 +1,9 @@
+2005-09-05  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
+
+	* registration/surface-data-term-1.sh: Add /usr/local/gnu/bin
+	to the PATH, for users at the BIC.  This script breaks if the
+	SGI join is used.
+
 2005-07-26  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
 
 	* configure.ac: Set version to 0.4.

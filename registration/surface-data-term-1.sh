@@ -22,7 +22,7 @@
 
 set -e
 
-PATH=xBINDIRx:$PATH
+PATH=xBINDIRx:/usr/local/gnu/bin:$PATH
 
 dist_trans_extra_vert=5
 while [ -n "$1" ]; do
