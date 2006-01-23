@@ -16,3 +16,4 @@ surface-resample
 surface-smooth-data
 surface-stats
 t_alpha_shape
+t_surface_distance_transform
