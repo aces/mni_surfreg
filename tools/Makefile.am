@@ -21,12 +21,12 @@ bin_PROGRAMS = \
 	surface-resample \
 	surface-stats
 
-TESTS = t_alpha_shape
+TESTS = t_alpha_shape t_surface_distance_transform
 
 # Common include file
-EXTRA_DIST = Surface.hpp t_alpha_shape.sh
+EXTRA_DIST = Surface.hpp t_alpha_shape.sh t_surface_distance_transform.sh
 
-CLEANFILES = t_alpha_shape
+CLEANFILES = t_alpha_shape t_surface_distance_transform
 
 alpha_shape_SOURCES = alpha-shape.cc
 surface_curvature_SOURCES = surface-curvature.cc
