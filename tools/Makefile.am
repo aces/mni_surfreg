@@ -21,9 +21,12 @@ bin_PROGRAMS = \
 	surface-resample \
 	surface-stats
 
+TESTS = t_alpha_shape
 
 # Common include file
-EXTRA_DIST = Surface.hpp
+EXTRA_DIST = Surface.hpp t_alpha_shape.sh
+
+CLEANFILES = t_alpha_shape
 
 alpha_shape_SOURCES = alpha-shape.cc
 surface_curvature_SOURCES = surface-curvature.cc
@@ -39,3 +42,12 @@ surface_map_stats_LDADD = ../registration/mesh_area.o $(LDADD)
 surface_map_stats_SOURCES = surface-map-stats.cc 
 surface_resample_SOURCES = surface-resample.cc
 surface_stats_SOURCES = surface-stats.cc
+
+SUFFIXES = .sh
+.sh:
+	@rm -f $@
+	sed < $< > $@-t \
+	    -e 's,xCREATE_TETRA_PATHx,$(CREATE_TETRA_PATH),g' \
+	    -e 's,xBICOBJ2VTK_PATHx,$(BICOBJ2VTK_PATH),g'
+	@chmod +x $@-t
+	mv $@-t $@
