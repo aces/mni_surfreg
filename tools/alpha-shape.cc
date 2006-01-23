@@ -32,6 +32,9 @@
 #include <surflib/load_surface_file.hpp>
 #include <surflib/vtk_ostream.hpp>
 
+#include <surflib/AlphaShapeUtil.hpp>
+
+
 
 template <class Refs, class Traits>
 struct My_vertex 
@@ -72,77 +75,11 @@ typedef CGAL::Alpha_shape_3<Triangulation_3>  Alpha_shape_3;
 typedef Surface::Vertex_handle       Vertex_handle;
 typedef Surface::Vertex_iterator     Vertex_iterator;
 
-typedef K::Point_3      Point_3;
 typedef CGAL::Unique_hash_map<const K::RT*,Vertex_handle> Point_map;
 
 
 using namespace std;
 
-
-
-
-
-void classify_vertices( Surface& s, 
-			bool classify, Alpha_shape_3::Coord_type alpha )
-{
-    for( Vertex_iterator v = s.vertices_begin(); v != s.vertices_end(); ++v )
-	v->label = -1;
-
-    /* The alpha shape is initialized with a copy of the points of s.
-     * In order to make the link from the shape vertices to the
-     * vertices of s, we use a map from Point_3 to Vertex, set up
-     * using the points of surface s.  For this to work, Point_3 must
-     * use Handle/Rep implementation; i.e. Cartesian rather than
-     * Simple_cartesian.
-     */
-    Point_map point_to_vertex;
-    Vertex_iterator v = s.vertices_begin();
-    CGAL_For_all( v, s.vertices_end() ) {
-        point_to_vertex[& v->point().x()] = v;
-    }
-    
-    cout << "Creating alpha shape ..." << flush;
-    Alpha_shape_3 shape( s.points_begin(), s.points_end() );
-    cout << "done." << endl;
-
-    if (classify && alpha < 0) {
-	cout << "Optimal alpha value for 1 component is " << flush;
-	alpha = *shape.find_optimal_alpha(1);
-	cout << alpha << endl;
-    }
-
-    if ( alpha > 0 ) 
-	cout << "Number of solid components: " 
-	     << shape.number_of_solid_components(alpha) << endl;
-
-
-    /* Set classification value in vertices of s.
-     */
-    Triangulation_3::Finite_vertices_iterator 
-	vi = shape.finite_vertices_begin();
-    CGAL_For_all( vi, shape.finite_vertices_end() ) {
-	CGAL_assertion( point_to_vertex.is_defined( & vi->point().x() ) );
-	Surface::Vertex_handle v = point_to_vertex[ & vi->point().x() ];
-	CGAL_assertion( v != point_to_vertex.default_value() );
-
-	Alpha_shape_3::Alpha_status* as = vi->get_alpha_status();
-
-	v->low  = CGAL::to_double( as->alpha_mid() );
-
-	if ( as->is_on_chull() )
-	    v->high = -1;
-	else
-	    v->high = CGAL::to_double( as->alpha_max() );
-
-	if (classify)
-	    v->label = shape.classify(vi,alpha);
-	else
-	    v->label = 0;
-    }
-
-    for( Vertex_iterator v = s.vertices_begin(); v != s.vertices_end(); ++v )
-	CGAL_postcondition( v->label != -1 );
-}
 
 
 
@@ -157,7 +94,7 @@ void process( char* input_file,
     Surface s;
 
     MNI::load_surface_file( s, input_file );
-    classify_vertices( s, classify, alpha );
+    MNI::classifyVertices( s, classify, alpha );
 
     if ( vtk_file ) {
 	// Write in VTK format.
