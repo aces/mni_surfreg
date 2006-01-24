@@ -45,8 +45,7 @@ int main( int ac, char* av[] )
     if ( ParseArgv( &ac, av, argTable, 0 ) || ac != 4 ) {
 	char* s = strrchr( av[0], '/' );
 	std::cerr << "usage: " << (s ? s+1 : av[0]) 
-		  << " [options] surface_geom surface_seeds distance.vv"
-		  << std::endl;
+		  << " [options] surface_geom surface_seeds distance.vv\n";
         return 1;
     }
 
@@ -67,7 +66,7 @@ int main( int ac, char* av[] )
 		seed_list.push_back(v);
 	}
 
-	cout << seed_list.size() << " seed vertices." << endl;
+	cout << seed_list.size() << " seed vertices.\n";
 	MNI::distanceTransform( s,
 				seed_list.begin(),
 				seed_list.end(),
@@ -80,33 +79,33 @@ int main( int ac, char* av[] )
 	    std::ofstream out( vtk_file );
 	    MNI::write_vtk( out, s, 
 			    "Distance transform" );
-	    out << "POINT_DATA " << s.size_of_vertices() << std::endl
-		<< "SCALARS depth double" << std::endl
-		<< "LOOKUP_TABLE default" << std::endl;
+	    out << "POINT_DATA " << s.size_of_vertices() << "\n"
+		<< "SCALARS depth double\n"
+		<< "LOOKUP_TABLE default\n";
 	    for( Surface::Vertex_iterator v = s.vertices_begin();
 		 v != s.vertices_end(); ++v )
-		out << v->scalar << std::endl;
+		out << v->scalar << "\n";
 	}
 
 	// Dump values to file in vertex order.
 	std::ofstream out( av[3] );
 	v = s.vertices_begin();
 	CGAL_For_all( v, s.vertices_end() ) {
-	    out << v->scalar << std::endl;
+	    out << v->scalar << "\n";
 	}
 
     } catch ( const std::bad_alloc& e ) {
-	std::cerr << "Failed a memory allocation." << "\n"
-		  << "No output." << "\n";
+	std::cerr << "Failed a memory allocation.\n"
+		  << "No output.\n";
 	return 2;
     } catch ( const std::exception& e ) {
 	std::cerr << "Error: " << e.what() << "\n"
-		  << "No output." << "\n";
+		  << "No output.\n";
         return 3;
     } catch ( ... ) {
-	std::cerr << "Unknown exception." << "\n"
-		  << "No output." << "\n"
-		  << "This is likely bug in the code: please report!" << "\n";
+	std::cerr << "Unknown exception.\n"
+		  << "No output.\n"
+		  << "This is likely bug in the code: please report!\n";
         return 4;
     }
 
