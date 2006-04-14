@@ -3,9 +3,15 @@ SUBDIRS = . surflib registration tools
 
 ACLOCAL_AMFLAGS = -I m4
 
-EXTRA_DIST = $(m4_files) \
-	HACKING \
-	test/tester.cc test/tester_meshes.hpp
+EXTRA_DIST = $(m4_files)					       \
+	HACKING							       \
+	test/tester.cc test/tester_meshes.hpp			       \
+	test/poly_20.obj test/poly_20_flipx.sm			       \
+	test/poly_20_identity.sm test/poly_5120.obj		       \
+	test/poly_5120_alpha.vv test/poly_5120_chull.vv		       \
+	test/poly_5120_dt00.vv test/poly_5120_dt05.vv		       \
+	test/poly_5120_dt15.vv test/poly_5120_sdt00.vv		       \
+	test/poly_5120_sdt05.vv test/poly_5120_sdt15.vv
 
 m4_files = \
         m4/mni_REQUIRE_LIB.m4 \
