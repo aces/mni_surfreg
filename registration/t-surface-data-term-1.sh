@@ -2,6 +2,11 @@
 
 set -e
 
+# Put ../tools on PATH so that alpha-shape and
+# surface-distance-transform may be found
+#
+PATH=../tools:.:$PATH
+export PATH
 
 out=/tmp/t-surface-data-term-1-$$
 indir=${srcdir}/../test
