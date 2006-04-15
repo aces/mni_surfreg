@@ -2,11 +2,12 @@ include $(CGAL_MAKEFILE)
 
 # Both AM_CXXFLAGS variables are from CGAL's makefile.
 AM_CXXFLAGS = $(CGAL_CXXFLAGS) $(LONG_NAME_PROBLEM_CXXFLAGS) 
-LDADD = ../surflib/libsurface.la $(CGAL_LDFLAGS)
+LDADD = ../surflib/libsurface.la $(bic_LIBS) $(CGAL_LDFLAGS)
 
 INCLUDES = -I$(top_srcdir) @GSL_CFLAGS@
 
-EXTRA_DIST = initial-surface-map.sh surface-data-term-1.sh sphere-register.pl t-surface-data-term-1.sh
+EXTRA_DIST = surface-data-term-1.sh sphere-register.pl \
+	t-initial-surface-map.sh t-surface-data-term-1.sh
 CLEANFILES = $(generated_scripts) $(generated_tests)
 
 bin_PROGRAMS = surftracc \
