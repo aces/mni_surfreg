@@ -2,6 +2,7 @@
 #define LOAD_SURFACE_FILE_HPP
 
 #include <cstring>
+#include <sstream>
 #include <surflib/Object_file_inserter.hpp>
 #include <surflib/VTKFile.hpp>
 
@@ -53,6 +54,36 @@ void load_bicobj_file( Polyhedron& s, char* filename )
     MNI::ObjFile_inserter::insert( infile, 0, true, s );
 }
 
+    namespace load_surface_file_impl
+    {
+	std::pair<int,double*> read_texture_values( char* filename )
+	{
+	    int n;
+	    double* values;
+	    if (input_texture_values(filename, &n, &values) == OK )
+		return std::pair<int,double*>(n,values);
+	    
+	    std::stringstream message;
+	    message << "load_bicobj_file_with_scalar: "
+		    << "cannot read vertex value file [" << filename << "]";
+	    throw std::runtime_error( message.str() );
+	}
+	
+	void assert_num_vertices( char* filename, 
+				  unsigned int expected, 
+				  unsigned int actual )
+	{
+	    if ( expected == actual )
+		return;
+	    
+	    std::stringstream message;
+	    message << "load_bicobj_file_with_scalar: "
+		    << "vertex value file [" << filename << "]"
+		    << " has " << actual << " values, but " << expected 
+		    << " are expected";
+	    throw std::runtime_error( message.str() );
+	}
+    }
 
 /*! \brief Load a BIC OBJ disk file into a surface structure.
  *
@@ -66,12 +97,11 @@ void load_bicobj_file_with_scalar( Polyhedron& s,
 {
     load_bicobj_file( s, obj_filename );
 
-    int n;
-    double* values;
-    if (input_texture_values(vv_filename, &n, &values) != OK )
-	throw std::runtime_error( "load_bicobj_file_with_scalar: cannot read vertex value file" );
-    if ( static_cast<typename Polyhedron::size_type>(n) != s.size_of_vertices() )
-	throw std::runtime_error( "load_bicobj_file_with_scalar: number of values in file != number of vertices" );
+    std::pair<int,double*> n_values = load_surface_file_impl::read_texture_values( vv_filename );
+
+    load_surface_file_impl::assert_num_vertices( vv_filename, s.size_of_vertices(), n_values.first );
+
+    double* values = n_values.second;
 	
     typename Polyhedron::Vertex_iterator v = s.vertices_begin();
     for( int i = 0; v != s.vertices_end(); ++i,++v ) 
