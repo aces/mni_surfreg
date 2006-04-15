@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)
 
 # AM_CXXFLAGS variables defined in CGAL makefile.
 AM_CXXFLAGS = $(CGAL_CXXFLAGS) $(LONG_NAME_PROBLEM_CXXFLAGS)
-LDADD = ../surflib/libsurface.la $(CGAL_LDFLAGS) 
+LDADD = ../surflib/libsurface.la $(bic_LIBS) $(CGAL_LDFLAGS) 
 
 bin_PROGRAMS = \
 	alpha-shape \

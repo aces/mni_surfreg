@@ -22,7 +22,7 @@ example1.obj: octahedron.obj
 
 # Both AM_CXXFLAGS variables are from CGAL's makefile.
 AM_CXXFLAGS = $(CGAL_CXXFLAGS) $(LONG_NAME_PROBLEM_CXXFLAGS)
-LDADD = ../libsurface.la $(CGAL_LDFLAGS) $(CPPUNIT_LIBS)
+LDADD = ../libsurface.la $(bic_LIBS) $(CGAL_LDFLAGS) $(CPPUNIT_LIBS)
 
 AM_CPPFLAGS = -I$(top_srcdir) $(CPPUNIT_CFLAGS) -DSRCDIR=\"$(srcdir)\"
 
