@@ -1,3 +1,24 @@
+2006-04-14  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
+
+	* surflib/load_surface_file.hpp (load_bicobj_file_with_scalar):
+	Improve the error reporting.
+
+	* surflib/Makefile.am (headers_hpp): Add AlphaShapeUtil.hpp and
+	DistanceTransform.hpp.
+
+	* tools/t_surface_distance_transform.sh: 
+	* tools/t_alpha_shape.sh: 
+	* registration/t-surface-data-term-1.sh: 
+	* registration/t-initial-surface-map.sh: Use ${srcdir} to find
+	test files, so that an out-of-source build works.
+
+	* tools/Makefile.am (LDADD): 
+	* surflib/test/Makefile.am (LDADD): 
+	* registration/Makefile.am (LDADD): Add $(bic_LIBS), needed
+	to pick up bicpl.
+
+	* Makefile.am (EXTRA_DIST): Add data files for testing.
+
 2005-09-05  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
 
 	* registration/surface-data-term-1.sh: Add /usr/local/gnu/bin
