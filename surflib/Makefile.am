@@ -17,17 +17,18 @@ libsurface_la_SOURCES =				\
 	src/VTKFile.cc
 libsurface_la_LIBADD = $(bic_LIBS)
 
-headers_hpp = Barycentric.hpp Diagnostic_ostream.hpp		   \
-	DisjointVertexSets.hpp Facet_coordinate_frame.hpp	   \
-	FileReader.hpp Histogram.hpp	   			   \
-	LinearInterpolation.hpp NearestNeighbourInterpolation.hpp  \
-	Object_file.hpp Object_file_inserter.hpp 		   \
-	Point_s.hpp Search.hpp					   \
-	ShortestPathQuery.hpp Statistic.hpp SurfaceFunctions.hpp   \
-	SurfaceMap.hpp SurfaceMapBase.hpp SurfaceMapIO.hpp	   \
-	SurfaceMap_hash.hpp SurfaceMap_hds.hpp SurfaceMap_poly.hpp \
-	VTKFile.hpp VectorStatistic.hpp	   \
-	Vector_s.hpp load_surface_file.hpp rotation.hpp		   \
+headers_hpp = AlphaShapeUtil.hpp Barycentric.hpp Diagnostic_ostream.hpp	\
+	DisjointVertexSets.hpp DistanceTransform.hpp			\
+	Facet_coordinate_frame.hpp					\
+	FileReader.hpp Histogram.hpp					\
+	LinearInterpolation.hpp NearestNeighbourInterpolation.hpp	\
+	Object_file.hpp Object_file_inserter.hpp			\
+	Point_s.hpp Search.hpp						\
+	ShortestPathQuery.hpp Statistic.hpp SurfaceFunctions.hpp	\
+	SurfaceMap.hpp SurfaceMapBase.hpp SurfaceMapIO.hpp		\
+	SurfaceMap_hash.hpp SurfaceMap_hds.hpp SurfaceMap_poly.hpp	\
+	VTKFile.hpp VectorStatistic.hpp					\
+	Vector_s.hpp load_surface_file.hpp rotation.hpp			\
 	surface_checking.hpp vtk_ostream.hpp
 
 headers_cpp = Facet_coordinate_frame.cpp Point_s.cpp	       \
