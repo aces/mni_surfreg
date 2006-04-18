@@ -91,6 +91,7 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(strtod strtol)
 
 AC_CONFIG_FILES([Makefile 
+docs/Makefile
 surflib/Makefile
 surflib/doc/Makefile surflib/doc/Doxyfile
 surflib/test/Makefile
