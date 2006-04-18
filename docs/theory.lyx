@@ -1,0 +1,2614 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\begin_preamble
+\usepackage{url}
+
+\newcommand{\inlinedef}[1]{\emph{#1}\index{#1}\glossary{#1}}
+\newcommand{\sphericaltri}{\textcircled{$\triangle$}}
+\end_preamble
+\language english
+\inputencoding auto
+\fontscheme ae
+\graphics default
+\paperfontsize 10
+\spacing single 
+\papersize letterpaper
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 1
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\leftmargin 40mm
+\topmargin 25mm
+\rightmargin 25mm
+\bottommargin 25mm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 2
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+The Theory and Practice of Non-Rigid Surface Warping
+\layout Author
+
+Steven M.
+ Robbins
+\layout Standard
+
+
+\begin_inset FormulaMacro 
+\newcommand{\Real}{\mathbb{R}}
+\end_inset 
+
+
+\begin_inset FormulaMacro 
+\newcommand{\Rthree}{\mathbb{R}^{3}}
+\end_inset 
+
+
+\begin_inset FormulaMacro 
+\newcommand{\Stwo}{\mathbb{S}^{2}}
+\end_inset 
+
+
+\layout Section
+
+Introduction
+\layout Standard
+
+Surface registration is a procedure that produces a spatial mapping from
+ one surface, which we call the 
+\emph on 
+source
+\emph default 
+ surface, to a second, 
+\emph on 
+target
+\emph default 
+, surface.
+ This manual is not a treatise on surface registration (see, e.g.
+ 
+\begin_inset LatexCommand \cite{robbins03:phd}
+
+\end_inset 
+
+) but only documents the specific theory and practice underlying 
+\noun on 
+surftracc
+\noun default 
+.
+ 
+\layout Section
+
+Input Data
+\layout Standard
+
+The input to surface registration is a pair of surfaces such as those generated
+ from a 3D MR image using software such as 
+\noun on 
+asp
+\noun default 
+/
+\noun on 
+clasp
+\noun default 
+
+\begin_inset LatexCommand \cite{macdonald00:cortical-surfaces}
+
+\end_inset 
+
+.
+ In adition, a feature data function for each surface is required.
+\layout Subsection
+
+Surface Description
+\layout Standard
+
+Each input surface must be a triangulated polyhedral surface, also called
+ a 
+\emph on 
+mesh
+\emph default 
+.
+ Further, 
+\noun on 
+surftracc
+\noun default 
+ assumes that the surface has a very specific structure as follows.
+\layout Standard
+
+First of all, 
+\noun on 
+surftracc
+\noun default 
+ requires that the mesh represent a topological sphere, i.e.
+ a closed surface that bounds a finite volume of space.
+\layout Standard
+
+A common way to refine a mesh is by quadrisection, in which each triangle
+ is replaced by four triangles by joining the midpoints of the three edges,
+ as shown.
+\layout Standard
+\align center 
+
+\begin_inset Graphics
+	filename quadrisection.eps
+
+\end_inset 
+
+
+\layout Standard
+
+In addition to being a topological sphere, 
+\noun on 
+surftracc
+\noun default 
+ requires that the mesh graph be a repeated quadrisection of an icosahedron,
+ the graph with 20 triangular faces and 12 vertices each of degree five.
+ Each quadrisection increases the number of faces by a factor of four.
+ The following table shows the number of faces and vertices produced by
+ repeated quadrisection.
+\layout Standard
+\align center 
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="9" columns="3">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+# Quadrisections
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+# Faces
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+# Vertices
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+20
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+12
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+80
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+42
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+320
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+162
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+3
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1280
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+642
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+5120
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2562
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+5
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+20480
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+10242
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+6
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+81920
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+40962
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+7
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+327680
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+163842
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\layout Standard
+
+Note that ASP/CLASP outputs surfaces of the form required by 
+\noun on 
+surftracc
+\noun default 
+.
+\layout Subsection
+
+Match Feature
+\layout Standard
+
+Along with each surface, we need data to determine how the surfaces match.
+ The basic idea is to define a scalar 
+\emph on 
+feature
+\emph default 
+ function on each surface such that a matching region on the source and
+ target have a similar feature pattern.
+ The feature values needn't match exactly since, as described below, we
+ use a correlation similarity measure to drive the optimization.
+\layout Standard
+
+The feature function is defined in a piecewise-linear fashion by providing
+ the function value at each vertex.
+ At other points on the surface, the function is interpolated from the 3
+ values at the triangle vertices.
+ This interpolation is described in more detail later.
+\layout Standard
+
+We next describe two geometric feature functions that can be used for registrati
+on: mean curvature and crown distance transform.
+\layout Subsubsection
+
+Curvature
+\layout Standard
+
+The mean surface curvature is a popular choice for match feature since gyral
+ crowns and sulcal fundii have curvature of different sign.
+ So matching curvature should match gyrus to gyrus and sulcus to sulcus.
+\layout Standard
+
+This Figure shows the value of mean curvature evaluated (using 
+\begin_inset LatexCommand \cite{taubin95:estimating-curvature}
+
+\end_inset 
+
+) at each vertex of the cortical surface.
+\layout Standard
+\align center 
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="1" columns="2">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename mean-cortex-top.ps
+	lyxscale 50
+	width 45line%
+	keepAspectRatio
+
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename mean-sphere-top.ps
+	lyxscale 50
+	width 45line%
+	keepAspectRatio
+
+\end_inset 
+
+
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+ 
+\layout Standard
+
+Since sulcal fundi and gyral crowns have mean curvature of opposite sign,
+ registration based on matching mean curvature should tend to match sulcus
+ to sulcus and gyrus to gyrus.
+ However, there is evidently a lot of noise in the curvature map as well,
+ due to small-scale oscillations in the mesh vertex positions, so the data
+ needs to be smoothed when used for registration, either by smoothing the
+ surface before computing the curvature, or by directly averaging function
+ values in a neighbourhood of each vertex.
+\layout Subsubsection
+
+Crown Distance Transform
+\layout Standard
+
+The intuition behind this feature, like that of mean curvature, is that
+ it is desirable to match points along the crown of a gyrus on the source
+ surface with points along the crown of a gyrus in the target surface.
+ Similarly, the fundus of a sulcus should match the fundus of a sulcus.
+ In contrast to matching by mean curvature, other points on the bank of
+ a sulcus are matched according to their fractional distance towards the
+ bottom of the sulcus, e.g.
+ a vertex halfway down the sulcus in the source mesh should match a point
+ halfway down the target sulcus.
+\layout Standard
+
+Suppose vertex 
+\begin_inset Formula $v$
+\end_inset 
+
+ is located in a sulcus of the source mesh.
+ Consider two shortest geodesic paths, one from 
+\begin_inset Formula $v$
+\end_inset 
+
+ to the gyral crown and the other from 
+\begin_inset Formula $v$
+\end_inset 
+
+ to the fundus.
+ Let the length of the first of these paths be 
+\begin_inset Formula $S(v)$
+\end_inset 
+
+ and let 
+\begin_inset Formula $S_{D}(v)$
+\end_inset 
+
+ be the sum of the two path lengths.
+ Distance 
+\begin_inset Formula $S_{D}(v)$
+\end_inset 
+
+ can be regarded as the depth of the sulcus along a path through 
+\begin_inset Formula $v$
+\end_inset 
+
+.
+ Let 
+\begin_inset Formula $R$
+\end_inset 
+
+ and 
+\begin_inset Formula $R_{D}$
+\end_inset 
+
+ be the analogous distance functions for the target surface.
+ The fractional depth of vertex 
+\begin_inset Formula $v$
+\end_inset 
+
+ on the source mesh is 
+\begin_inset Formula $S(v)/S_{D}(v)$
+\end_inset 
+
+.
+\layout Standard
+\align center 
+
+\begin_inset Graphics
+	filename fractional-depth.eps
+	width 90col%
+	height 20page%
+	keepAspectRatio
+
+\end_inset 
+
+
+\layout Standard
+
+The desired matching is to a point 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+ on the target surface such that 
+\begin_inset Formula $S(v)/S_{D}(v)\approx R(T(v))/R_{D}(T(v))$
+\end_inset 
+
+, or
+\begin_inset Formula \begin{equation}
+R(T(x))=\alpha(x)+\beta(x)S(x)+\epsilon(x),\label{eq:dt-matching-relation}\end{equation}
+
+\end_inset 
+
+ where 
+\begin_inset Formula $\epsilon$
+\end_inset 
+
+ represents random noise, 
+\begin_inset Formula $\beta(x)=R_{D}(T(x))/S_{D}(x)$
+\end_inset 
+
+, and 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ should be zero.
+ However, 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ is left free to compensate for practical difficulties in computing 
+\begin_inset Formula $S(x)$
+\end_inset 
+
+ and 
+\begin_inset Formula $R(x)$
+\end_inset 
+
+.
+ Note that points near to 
+\begin_inset Formula $v$
+\end_inset 
+
+ should have depth values close to 
+\begin_inset Formula $S_{D}(v)$
+\end_inset 
+
+ and similarly points near 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+ should have depth values close to 
+\begin_inset Formula $R_{D}(T(v))$
+\end_inset 
+
+.
+ Assuming that 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ and 
+\begin_inset Formula $\beta$
+\end_inset 
+
+ are slowly-varying functions, the maximum likelihood estimate for 
+\begin_inset Formula $T$
+\end_inset 
+
+ corresponds to maximizing the regional correlation coefficient 
+\begin_inset LatexCommand \cite{robbins03:phd}
+
+\end_inset 
+
+.
+ 
+\layout Standard
+
+Note that only the gyral crown distance functions, 
+\begin_inset Formula $S$
+\end_inset 
+
+ and 
+\begin_inset Formula $R$
+\end_inset 
+
+ appear in Equation\SpecialChar ~
+
+\begin_inset LatexCommand \ref{eq:dt-matching-relation}
+
+\end_inset 
+
+ and not 
+\begin_inset Formula $S_{D}$
+\end_inset 
+
+ and 
+\begin_inset Formula $R_{D}$
+\end_inset 
+
+.
+ Thus, the feature value stored at each vertex is the geodesic 
+\emph on 
+distance transform
+\emph default 
+ from a set of gyral 
+\begin_inset Quotes eld
+\end_inset 
+
+seed
+\begin_inset Quotes erd
+\end_inset 
+
+ vertices, i.e.
+ the length of the shortest geodesic path from 
+\begin_inset Formula $v$
+\end_inset 
+
+ to a vertex in the seed set.
+\layout Paragraph
+
+Seed Points
+\layout Standard
+
+The vertices chosen to be the seeds should in principle be all vertices
+ located on all the gyral crowns.
+ We can identify gyral vertices with the help of an 
+\emph on 
+
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-shape
+\emph default 
+ 
+\begin_inset LatexCommand \cite{edelsbrunner94:alpha-shapes}
+
+\end_inset 
+
+, a discrete geometry notion that can be considered as a relaxation of the
+ convex hull.
+ The degree of relaxation is controlled by the parameter 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ in the following manner.
+ Let 
+\begin_inset Formula $S$
+\end_inset 
+
+ be a set of points in 
+\begin_inset Formula $\Rthree$
+\end_inset 
+
+.
+ Define an 
+\emph on 
+
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-ball
+\emph default 
+
+\begin_inset Foot
+collapsed true
+
+\layout Standard
+
+The definition given here follows the Computational Geometry Algorithms
+ Library (CGAL) 
+\begin_inset LatexCommand \cite{cgal-web}
+
+\end_inset 
+
+, as the implementation of 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-shape provided by CGAL is used.
+ In the original definition of Edelsbrunner and Mücke, 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ is the radius of the 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-ball.
+\end_inset 
+
+ to be a closed ball of radius 
+\begin_inset Formula $\sqrt{\alpha}$
+\end_inset 
+
+, i.e.
+ the point set 
+\begin_inset Formula $\{ x\in\Rthree:||x-p||\le\sqrt{\alpha}\}$
+\end_inset 
+
+, for some 
+\begin_inset Formula $p\in\Rthree$
+\end_inset 
+
+.
+ The points of 
+\begin_inset Formula $S$
+\end_inset 
+
+ that form the vertices of the 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-shape of 
+\begin_inset Formula $S$
+\end_inset 
+
+ are those that lie on the boundary of an 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-ball with no point of 
+\begin_inset Formula $S$
+\end_inset 
+
+ on the interior of the 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-ball.
+ Such vertices are said to be 
+\emph on 
+
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-exposed.
+
+\emph default 
+ Note that convex hull vertices are always 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-exposed, since for every point 
+\begin_inset Formula $x$
+\end_inset 
+
+ on the boundary of a convex set, there exists a ball of radius 
+\begin_inset Formula $\sqrt{\alpha}$
+\end_inset 
+
+ for any value of 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ that intersects the convex set only at 
+\begin_inset Formula $x$
+\end_inset 
+
+.
+ Thus the vertices of the 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-shape with 
+\begin_inset Formula $\alpha=\infty$
+\end_inset 
+
+ are the vertices of the convex hull.
+ As 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+ is decreased, more points become 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-exposed until at 
+\begin_inset Formula $\alpha=0$
+\end_inset 
+
+ all points are 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-exposed.
+ 
+\layout Standard
+
+Using 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-balls of radius 10 mm (i.e.
+ 
+\begin_inset Formula $\alpha=100$
+\end_inset 
+
+), a value empirically chosen using visual inspection of the results, produces
+ good outlines of several major gyri.
+ However, there are also vertices in the point set lying underneath the
+ brain on the arbitrary 
+\begin_inset Quotes eld
+\end_inset 
+
+cap
+\begin_inset Quotes erd
+\end_inset 
+
+ through the brain stem which should not form part of the seed set; these
+ vertices are masked out as follows.
+ The distance transform is computed using the convex hull points as the
+ seed vertices and any vertex with a distance transform value greater than
+ 35 (a value chosen empirically) is removed from the set of vertices of
+ the 
+\begin_inset Formula $\alpha$
+\end_inset 
+
+-shape.
+ The remaining vertices form the seed set used for the crown distance transform
+ feature.
+\layout Paragraph
+
+Geodesic Distance
+\layout Standard
+
+The distance transform used in practice is an approximation to the geodesic
+ distance, as computing true geodesic distance is computationally costly
+ and difficult to code robustly 
+\begin_inset LatexCommand \cite{lanthier01:approx-weighted-shortest-path}
+
+\end_inset 
+
+.
+ The approximation is computed using the mesh graph with the weight for
+ each edge set to the Euclidean length of the edge.
+ An additional vertex, 
+\begin_inset Formula $s$
+\end_inset 
+
+, is inserted and attached to each seed vertex with a zero weight edge.
+ Then Dijkstra's single-source shortest path algorithm 
+\begin_inset LatexCommand \cite{cormen90:intro-algorithms}
+
+\end_inset 
+
+ is run with 
+\begin_inset Formula $s$
+\end_inset 
+
+ as the source vertex.
+ To improve the accuracy of the approximation the mesh is refined before
+ running Dijkstra's shortest path algorithm.
+ First, 
+\begin_inset Formula $m$
+\end_inset 
+
+ equally-space extra points are inserted on each edge, then a new edge is
+ inserted for each pair of extra points that either (i) are adjacent on
+ an original edge, or (ii) are on different edges both of which are incident
+ to a common (original) facet.
+ The approximate shortest path computed by this algorithm consists of line
+ segments which are either an edge of the original surface, or cross a facet
+ of the original surface as shown.
+\layout Standard
+\align center 
+
+\begin_inset Graphics
+	filename approximate-path.eps
+
+\end_inset 
+
+
+\layout Standard
+
+The crown distance transform from the final seed set is illustrated below.
+\layout Standard
+\align center 
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename sphere-top.ps
+	lyxscale 40
+	width 40col%
+	height 15page%
+	keepAspectRatio
+
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename sphere-bottom.ps
+	lyxscale 40
+	width 40col%
+	height 15page%
+	keepAspectRatio
+
+\end_inset 
+
+
+\end_inset 
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Top
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Bottom
+\end_inset 
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename sphere-left.ps
+	lyxscale 40
+	width 40col%
+	height 15page%
+	keepAspectRatio
+
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename sphere-right.ps
+	lyxscale 40
+	width 40col%
+	height 15page%
+	keepAspectRatio
+
+\end_inset 
+
+
+\end_inset 
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Left
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Right
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\layout Section
+
+Triangle Interpolation
+\layout Standard
+
+Both the feature data function described above and, ultimately, the transformati
+on 
+\begin_inset Formula $T$
+\end_inset 
+
+ are defined at mesh vertices and interpolated across the rest of the surface.
+ We pause to discuss this interpolation before discussing the optimization
+ used to search for 
+\begin_inset Formula $T$
+\end_inset 
+
+.
+\layout Subsection
+
+Scalar Function Interpolation
+\layout Standard
+
+Suppose that for a function, 
+\begin_inset Formula $f$
+\end_inset 
+
+, a real value is associated with each vertex of the mesh, as is the case
+ for the feature function data.
+ Let 
+\begin_inset Formula $p$
+\end_inset 
+
+ be a point on the mesh and consider what value to assign 
+\begin_inset Formula $f(p)$
+\end_inset 
+
+.
+ 
+\layout Standard
+
+If 
+\begin_inset Formula $p$
+\end_inset 
+
+ is a vertex, the vertex value is assigned.
+ 
+\layout Standard
+
+If 
+\begin_inset Formula $p$
+\end_inset 
+
+ is not a vertex, let 
+\begin_inset Formula $ABC$
+\end_inset 
+
+ be a triangle of the mesh that contains 
+\begin_inset Formula $p$
+\end_inset 
+
+.
+ There is a unique triple of real values 
+\begin_inset Formula $(\alpha,\beta,\gamma)$
+\end_inset 
+
+ with 
+\begin_inset Formula $\alpha+\beta+\gamma=1$
+\end_inset 
+
+ that satisfies 
+\begin_inset Formula $p=\alpha A+\beta B+\gamma C$
+\end_inset 
+
+.
+ This triple is known as the 
+\emph on 
+areal coordinates
+\emph default 
+ of 
+\begin_inset Formula $p$
+\end_inset 
+
+ 
+\begin_inset LatexCommand \cite[section 13.7]{coxeter69:intro-geometry}
+
+\end_inset 
+
+.
+ We use these values for interpolation, assigning 
+\begin_inset Formula $f(p)=\alpha f(A)+\beta f(B)+\gamma f(C)$
+\end_inset 
+
+.
+ It is clear that this choice of interpolation (a) is consistent with the
+ assigned values at vertices 
+\begin_inset Formula $A$
+\end_inset 
+
+, 
+\begin_inset Formula $B$
+\end_inset 
+
+, and 
+\begin_inset Formula $C$
+\end_inset 
+
+, and (b) gives consistent values along a shared triangle edge no matter
+ which triangle is used for the interpolation.
+\layout Subsection
+
+Triangulation Warping
+\layout Subsubsection
+
+Auxiliary Space
+\layout Standard
+
+While it is conceivable to define the mapping 
+\begin_inset Formula $T$
+\end_inset 
+
+ directly on the input mesh, it is easier to use a simpler auxiliary space
+ instead;
+\noun on 
+ surftracc
+\noun default 
+ uses the unit sphere.
+ The source mesh, 
+\begin_inset Formula $M_{I}$
+\end_inset 
+
+, is first mapped to the sphere using an invertible projection map, 
+\begin_inset Formula $\Pi_{I}$
+\end_inset 
+
+.
+ This projection is given implicitly by the fact that 
+\begin_inset Formula $M_{I}$
+\end_inset 
+
+ is constrained to be a repeated quadrisection of the icosahedron, as discussed
+ above.
+ The target surface 
+\begin_inset Formula $M_{J}$
+\end_inset 
+
+ is similarly projected to the sphere by 
+\begin_inset Formula $\Pi_{J}$
+\end_inset 
+
+.
+ The registration algorithm then computes 
+\begin_inset Formula $T:\Stwo\rightarrow\Stwo$
+\end_inset 
+
+ which, together with the two projection operations, serves to define map
+ between the two input surface meshes, denoted 
+\begin_inset Formula $W:M_{I}\rightarrow M_{J}$
+\end_inset 
+
+ in the diagram.
+\layout Standard
+\align center 
+
+\begin_inset Graphics
+	filename mappings.eps
+	width 100col%
+	keepAspectRatio
+
+\end_inset 
+
+
+\layout Subsubsection
+
+Triangulation Warping on the Sphere
+\layout Standard
+
+We discuss now how the sphere-to-sphere mapping, 
+\begin_inset Formula $T:\Stwo\rightarrow\Stwo$
+\end_inset 
+
+ is defined.
+ The basic idea is that the source sphere is partitioned into spherical
+ triangles, and the mapping under 
+\begin_inset Formula $T$
+\end_inset 
+
+ is given for each spherical triangle.
+ 
+\layout Paragraph
+
+Mapping one Triangle
+\layout Standard
+
+Let 
+\begin_inset Formula $A$
+\end_inset 
+
+, 
+\begin_inset Formula $B$
+\end_inset 
+
+, and 
+\begin_inset Formula $C$
+\end_inset 
+
+ be three points on the sphere 
+\begin_inset Formula $\Stwo$
+\end_inset 
+
+ that are not coplanar with the origin.
+ Using projection from the origin, i.e.
+ the mapping 
+\begin_inset Formula $x\mapsto x/||x||$
+\end_inset 
+
+, the planar triangle 
+\begin_inset Formula $ABC$
+\end_inset 
+
+ is put into 1-1 correspondence with a triangular patch of 
+\begin_inset Formula $\Stwo$
+\end_inset 
+
+ bounded by three shortest geodesics, from 
+\begin_inset Formula $A$
+\end_inset 
+
+ to 
+\begin_inset Formula $B$
+\end_inset 
+
+, from 
+\begin_inset Formula $B$
+\end_inset 
+
+ to 
+\begin_inset Formula $C$
+\end_inset 
+
+, and from 
+\begin_inset Formula $C$
+\end_inset 
+
+ to 
+\begin_inset Formula $A$
+\end_inset 
+
+.
+ Each geodesic bounding the patch is denoted an 
+\emph on 
+edge arc
+\emph default 
+, and the triangular patch of 
+\begin_inset Formula $\Stwo$
+\end_inset 
+
+ is known as the 
+\emph on 
+spherical triangle
+\emph default 
+ 
+\begin_inset Formula $\sphericaltri ABC$
+\end_inset 
+
+.
+ Given the 1-1 mapping between the planar triangle 
+\begin_inset Formula $\triangle ABC$
+\end_inset 
+
+ and the spherical triangle 
+\begin_inset Formula $\sphericaltri ABC$
+\end_inset 
+
+, areal coordinates can be used to refer to either 
+\begin_inset Formula $q=\alpha A+\beta B+\gamma C\in\triangle ABC$
+\end_inset 
+
+ or to 
+\begin_inset Formula $p=q/||q||\in\sphericaltri ABC$
+\end_inset 
+
+.
+\layout Standard
+
+The mapping of 
+\begin_inset Formula $\sphericaltri ABC$
+\end_inset 
+
+ begins by specifying the positions of the vertices under the mapping; define
+ 
+\begin_inset Formula $A'\equiv T(A)$
+\end_inset 
+
+, 
+\begin_inset Formula $B'\equiv T(B)$
+\end_inset 
+
+, and 
+\begin_inset Formula $C'\equiv T(C)$
+\end_inset 
+
+.
+ Define a mapping from point 
+\begin_inset Formula $p$
+\end_inset 
+
+ in spherical triangle 
+\begin_inset Formula $\sphericaltri ABC$
+\end_inset 
+
+ to point 
+\begin_inset Formula $T(p)$
+\end_inset 
+
+ in spherical triangle 
+\begin_inset Formula $\sphericaltri A'B'C'$
+\end_inset 
+
+ as follows.
+ First, project 
+\begin_inset Formula $p$
+\end_inset 
+
+ to point 
+\begin_inset Formula $q$
+\end_inset 
+
+ on the planar triangle 
+\begin_inset Formula $ABC$
+\end_inset 
+
+ and compute the areal coordinates of 
+\begin_inset Formula $q$
+\end_inset 
+
+.
+ We define the corresponding point 
+\begin_inset Formula $q'\in\triangle A'B'C'$
+\end_inset 
+
+ using 
+\begin_inset Formula $q'\equiv\alpha A'+\beta B'+\gamma C'$
+\end_inset 
+
+.
+ Finally, 
+\begin_inset Formula $q'$
+\end_inset 
+
+ is projected to point on the sphere, denoted 
+\begin_inset Formula $p'$
+\end_inset 
+
+ and we define 
+\begin_inset Formula $T(p)$
+\end_inset 
+
+ to be 
+\begin_inset Formula $p'$
+\end_inset 
+
+.
+ 
+\layout Standard
+\align center 
+
+\begin_inset Graphics
+	filename trianglemap-sphere.eps
+	width 100col%
+	keepAspectRatio
+
+\end_inset 
+
+
+\layout Paragraph
+
+Mapping the Entire Sphere
+\layout Standard
+
+In order to map the entire sphere, all we need is a partitioning of the
+ sphere into a set of non-overlapping spherical triangles.
+ For each triangle, we use the procedure just described to map it.
+ Since each point of the input sphere is contained in at least one triangle,
+ a mapping of the sphere is achieved.
+ As is the case when interpolating real values, the interpolation of 
+\begin_inset Formula $T$
+\end_inset 
+
+ is consistent at vertices and along edges of each spherical triangle.
+ The overall mapping 
+\begin_inset Formula $T$
+\end_inset 
+
+ is 1-1 and invertible if it satisfies certain conditions 
+\begin_inset LatexCommand \cite{robbins03:phd}
+
+\end_inset 
+
+.
+ The main two conditions are that (a) the orientation of each spherical
+ triangle is preserved (i.e.
+ the triangle is not 
+\begin_inset Quotes eld
+\end_inset 
+
+flipped
+\begin_inset Quotes erd
+\end_inset 
+
+) and (b) for each vertex, the cyclic ordering of its neighbouring vertices
+ is preserved.
+\layout Standard
+
+Note that the partitioning of the source sphere is equivalent to finding
+ a simple triangulated mesh, denoted the 
+\emph on 
+control
+\emph default 
+ mesh, inscribed in the sphere.
+ The input meshes to 
+\noun on 
+surftracc
+\noun default 
+ provide such a mesh due to the constraint that they be obtained by repeated
+ quadrisection of the icosahedron.
+\layout Section
+
+Optimizing the Spatial Transformation
+\layout Standard
+
+Registration is generally cast in terms of an optimization problem, in which
+ we seek 
+\begin_inset Formula $T$
+\end_inset 
+
+ that will optimize the match of the feature function defined on each surface.
+ 
+\noun on 
+surftracc
+\noun default 
+ uses a minimization with a correlation coefficient-based objective function
+ that penalizes difference between the feature value at corresponding points
+ on the surfaces.
+\layout Standard
+
+In addition, the objective function incorporates a 
+\emph on 
+regularization
+\emph default 
+ term that penalizes a transformation that is unlikely.
+ Let 
+\begin_inset Formula $S$
+\end_inset 
+
+ and 
+\begin_inset Formula $R$
+\end_inset 
+
+ be the feature functions on the source and target surfaces, respectively.
+ The objective function 
+\begin_inset Formula $\Phi$
+\end_inset 
+
+ is expressed as a sum 
+\begin_inset Formula \begin{equation}
+\Phi(S,R,T)=\Phi_{D}(S,R,T)+\Phi_{R}(T),\label{eq:obj-is-data-plus-reg}\end{equation}
+
+\end_inset 
+
+ and the optimization problem to solve becomes 
+\layout Standard
+
+
+\begin_inset Formula \[
+T=\arg\min_{T'}\Phi(S,R,T').\]
+
+\end_inset 
+
+ 
+\layout Standard
+
+As discussed in the previous section, 
+\begin_inset Formula $T$
+\end_inset 
+
+ is given by specifying its value at each vertex.
+ The transformation value is a point on 
+\begin_inset Formula $\Stwo$
+\end_inset 
+
+, which takes two parameters to specify (e.g.
+ latitude and longitude), so the registration algorithm has two parameters
+ to optimize per vertex.
+ With so many parameters to estimate (80k on a 40k mesh), it is important
+ to choose an effective optimization technique.
+ 
+\layout Subsection
+
+Two Step Non-Rigid Warping Algorithm
+\layout Standard
+
+The complexity is handled by separating the problem into a number of smaller
+ optimizations 
+\begin_inset LatexCommand \cite{nocedal99:numerical-optimization}
+
+\end_inset 
+
+, one per vertex.
+ To make this happen, both the data and regularization terms in Equation
+ 
+\begin_inset LatexCommand \ref{eq:obj-is-data-plus-reg}
+
+\end_inset 
+
+ must be 
+\emph on 
+separable,
+\emph default 
+ i.e.
+ expressible as a sum of simpler terms.
+ The parameters being optimized should be partitioned amongst the terms
+ and each term should involve just a few of the parameters being optimized.
+\layout Standard
+
+The data term, after discretization to evaluate it on the mesh, is naturally
+ separable into one term per mesh vertex 
+\begin_inset Formula $v$
+\end_inset 
+
+, involving only the two values required to specify 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+.
+\layout Standard
+
+The regularization term can also be made separable by transforming the problem
+ into two interleaved minimizations.
+ We modify the problem by introducing a second transformation, 
+\begin_inset Formula $U$
+\end_inset 
+
+.
+ A third term is introduced into the objective function to link the transformati
+ons, resulting in 
+\layout Standard
+
+
+\begin_inset Formula \begin{equation}
+\Phi(T,U)=\Phi_{D}(U)+\Psi(T-U)+\Phi_{R}(T),\label{eq:two-step-objective-3d}\end{equation}
+
+\end_inset 
+
+where 
+\begin_inset Formula $\Psi$
+\end_inset 
+
+ penalizes difference between 
+\begin_inset Formula $T$
+\end_inset 
+
+ and 
+\begin_inset Formula $U$
+\end_inset 
+
+; we might use 
+\begin_inset Formula $\Psi(T-U)=\int||T-U||^{2}$
+\end_inset 
+
+, for example.
+ After minimizing over both 
+\begin_inset Formula $T$
+\end_inset 
+
+ and 
+\begin_inset Formula $U$
+\end_inset 
+
+, the transformation 
+\begin_inset Formula $T$
+\end_inset 
+
+ is returned as the final solution.
+ In other words, the registration problem solved is
+\begin_inset Formula \[
+\arg\min_{T}\Phi'(T),\]
+
+\end_inset 
+
+where 
+\begin_inset Formula \[
+\Phi'(T)=\arg\min_{U}\Phi(T,U).\]
+
+\end_inset 
+
+
+\layout Standard
+
+The new objective function, Equation 
+\begin_inset LatexCommand \ref{eq:two-step-objective-3d}
+
+\end_inset 
+
+, has twice as many variables as the original objective function, 
+\begin_inset Formula $\Phi_{D}+\Phi_{R}$
+\end_inset 
+
+.
+ The registration algorithm proceeds in a sequence of 
+\begin_inset Quotes eld
+\end_inset 
+
+half iteration
+\begin_inset Quotes erd
+\end_inset 
+
+ steps.
+ One half iteration fixes the variables that define 
+\begin_inset Formula $T$
+\end_inset 
+
+ while optimizing 
+\begin_inset Formula $U$
+\end_inset 
+
+ 
+\begin_inset Formula \begin{equation}
+U=\arg\min_{U'}\Phi(T,U')=\arg\min_{U'}\Phi_{D}(U')+\Psi(T-U').\label{eq:two-step-U}\end{equation}
+
+\end_inset 
+
+The next half iteration fixes the variables that define 
+\begin_inset Formula $U$
+\end_inset 
+
+ while optimizing 
+\begin_inset Formula $T$
+\end_inset 
+
+
+\begin_inset Formula \begin{equation}
+T=\arg\min_{T'}\Phi(T',U)=\arg\min_{T'}\Psi(T'-U)+\Phi_{R}(T').\label{eq:two-step-T}\end{equation}
+
+\end_inset 
+
+ The first step (Expression 
+\begin_inset LatexCommand \ref{eq:two-step-U}
+
+\end_inset 
+
+) can be seen as finding a transformation, 
+\begin_inset Formula $U$
+\end_inset 
+
+, that matches the data while remaining close to the previous solution,
+ 
+\begin_inset Formula $T$
+\end_inset 
+
+ by virtue of 
+\begin_inset Formula $\Psi$
+\end_inset 
+
+.
+ The second step (Expression 
+\begin_inset LatexCommand \ref{eq:two-step-T}
+
+\end_inset 
+
+) can be seen as regularizing the transformation 
+\begin_inset Formula $U$
+\end_inset 
+
+ to produce a smoother transformation 
+\begin_inset Formula $T$
+\end_inset 
+
+.
+ This is summarized in Algorithm 
+\begin_inset LatexCommand \ref{alg:Two-Step-Registration}
+
+\end_inset 
+
+.
+ 
+\begin_inset Float algorithm
+wide false
+collapsed false
+
+\layout Caption
+
+
+\begin_inset LatexCommand \label{alg:Two-Step-Registration}
+
+\end_inset 
+
+Two-Step Registration.
+\layout Enumerate
+
+Set 
+\begin_inset Formula $T$
+\end_inset 
+
+ to initial estimate.
+\layout Enumerate
+
+Minimize 
+\begin_inset Formula $\Phi_{D}(U)+\Psi(T-U)$
+\end_inset 
+
+, where the term 
+\begin_inset Formula $\Psi$
+\end_inset 
+
+ penalizes deviation of 
+\begin_inset Formula $U$
+\end_inset 
+
+ from 
+\begin_inset Formula $T$
+\end_inset 
+
+.
+\layout Enumerate
+
+Set 
+\begin_inset Formula $T$
+\end_inset 
+
+ to be the smoothed version of 
+\begin_inset Formula $U$
+\end_inset 
+
+.
+\layout Enumerate
+
+Repeat steps 2-3 until done.
+\end_inset 
+
+ One cost of broadening the criterion for the two steps is that the resulting
+ algorithm may no longer be interpretable as a minimization problem.
+ 
+\layout Standard
+
+One of the advantages of this algorithm is that 
+\begin_inset Formula $\Psi$
+\end_inset 
+
+ can easily be chosen to be separable so that, when 
+\begin_inset Formula $\Phi_{D}$
+\end_inset 
+
+ is also separable, the optimization in step 2 is separable.
+ Step 3, though not necessarily separable, requires only linear time and
+ space.
+ So the overall algorithm is tractable.
+\layout Subsection
+
+Coarse-to-Fine Hierarchy
+\layout Standard
+
+Non-rigid registration of the sort implemented here is almost universally
+ performed with multiple 
+\begin_inset Quotes eld
+\end_inset 
+
+resolutions
+\begin_inset Quotes erd
+\end_inset 
+
+ of the transformation.
+ 
+\noun on 
+surftracc
+\noun default 
+ implements this idea by running Algorithm\SpecialChar ~
+
+\begin_inset LatexCommand \ref{alg:Two-Step-Registration}
+
+\end_inset 
+
+ on a coarse control mesh of 1280 triangles (a three-fold quadrisection
+ of the icosahedron).
+ The control mesh is then refined using quadrisection, the mapping function
+ 
+\begin_inset Formula $T$
+\end_inset 
+
+ is interpolated onto the new control mesh, and Algorithm\SpecialChar ~
+
+\begin_inset LatexCommand \ref{alg:Two-Step-Registration}
+
+\end_inset 
+
+ is run again.
+\layout Standard
+
+As previously discussed, the input surface mesh is a quadrisection of the
+ icosahedron, typically six-fold (81920 triangles).
+ The control mesh begins as a three-fold quadrisection of the 
+\emph on 
+same
+\emph default 
+ icosahedron.
+ Thus, after a number of repeated refine and registration steps, the control
+ mesh will exactly coincide with the input surface mesh.
+ The registration terminates at this point with the value of 
+\begin_inset Formula $T$
+\end_inset 
+
+ specified for each vertex of the input mesh.
+\layout Subsubsection
+
+Initial Surface Mapping
+\layout Standard
+
+In principle, the initial mapping of the coarsest control mesh should be
+ obtained by a low-dimensional warping, e.g.
+ searching for the optimal rotation of the sphere.
+ However, the current implementation of 
+\noun on 
+surftracc
+\noun default 
+ assumes the user has done this as a preprocessing step.
+ Typically this is achieved by obtaining both the source and target surfaces
+ using 
+\noun on 
+asp
+\noun default 
+ from MR images that are initially registered using a 9-parameter affine
+ transformation to a common target.
+ Since the MR images are aligned, a given vertex 
+\begin_inset Formula $v$
+\end_inset 
+
+ of the initial mesh tends to end up in a nearly homologous location on
+ each image 
+\begin_inset LatexCommand \cite{macdonald00:cortical-surfaces}
+
+\end_inset 
+
+.
+ This means that the initial transformation on the coarsest control mesh
+ can simply be set to the identity mapping.
+ 
+\layout Subsubsection
+
+Data Refinement
+\layout Standard
+
+When the feature value map requires smoothing so as to reduce noise, the
+ smoothing is typically done in a coarse-to-fine manner in step with the
+ control mesh refinement.
+ The coarse control mesh is used with heavily-smoothed data, with the amount
+ of smoothing being reduced after each level of the hierarchy.
+\layout Standard
+
+One simple method for smoothing is as follows.
+ Let 
+\begin_inset Formula $D(v)$
+\end_inset 
+
+ denote the data value at vertex 
+\begin_inset Formula $v$
+\end_inset 
+
+.
+ The data smoothing replaces, in parallel for all 
+\begin_inset Formula $v$
+\end_inset 
+
+, 
+\begin_inset Formula $D(v)$
+\end_inset 
+
+ by 
+\begin_inset Formula \begin{equation}
+(D(v)+a\sum_{u\in N_{v}}D(u))/\alpha,\label{eq:smooth-scalars}\end{equation}
+
+\end_inset 
+
+where 
+\begin_inset Formula $N_{v}$
+\end_inset 
+
+ is the set of neighbours of 
+\begin_inset Formula $v$
+\end_inset 
+
+, 
+\begin_inset Formula $\alpha=1+a|N_{v}|$
+\end_inset 
+
+ is a scaling factor to ensure the weights add to 1, and 
+\begin_inset Formula $a$
+\end_inset 
+
+ is a constant.
+ The smoothing operation is iterated, say, 128 times at the coarsest level
+ of control mesh, 32 for the next, then 8, and finally twice at the level
+ of the finest control mesh.
+ The result of such smoothing the mean curvature data term shown below.
+ 
+\layout Standard
+\align center 
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="2" columns="2">
+<features>
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename 00111_smooth_128.ps
+	lyxscale 40
+	width 50line%
+	keepAspectRatio
+
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename 00111_smooth_32.ps
+	lyxscale 40
+	width 50line%
+	keepAspectRatio
+
+\end_inset 
+
+
+\end_inset 
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename 00111_smooth_8.ps
+	lyxscale 40
+	width 50line%
+	keepAspectRatio
+
+\end_inset 
+
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+
+\begin_inset Graphics
+	filename 00111_smooth_2.ps
+	lyxscale 40
+	width 50line%
+	keepAspectRatio
+
+\end_inset 
+
+
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\layout Subsection
+
+Inner Loop
+\layout Standard
+
+The optimization perfomed at each step of the coarse-to-fine outer loop
+ is the two-step Algorithm 
+\begin_inset LatexCommand \ref{alg:Two-Step-Registration}
+
+\end_inset 
+
+, which we call the inner loop.
+\layout Subsubsection
+
+Matching (Step 2)
+\layout Standard
+
+The data term is written as a sum of terms, one for each vertex, 
+\begin_inset Formula $\Phi_{D}(U)=\sum_{v}\phi^{v}(U)$
+\end_inset 
+
+.
+ Each term is based on the correlation coefficient similarity measure 
+\begin_inset LatexCommand \cite{roche00:max-likelihood}
+
+\end_inset 
+
+, that produces a value in range 
+\begin_inset Formula $[-1,1]$
+\end_inset 
+
+ with better match indicated by larger score.
+ Since 
+\noun on 
+surftracc
+\noun default 
+ operates as a minimization, we need to invert this
+\begin_inset Formula \[
+\phi^{v}(U)=1-\phi_{CC}^{v}(U),\]
+
+\end_inset 
+
+where 
+\begin_inset Formula $\phi_{CC}^{v}$
+\end_inset 
+
+ is the correlation coefficient evaluated between a neighbourhood of 
+\begin_inset Formula $v$
+\end_inset 
+
+ on the source data and a neighbourhood of 
+\begin_inset Formula $U(v)$
+\end_inset 
+
+ on the target data.
+ 
+\layout Standard
+
+Each neighbourhood is a spherical cap at the given centre point 
+\begin_inset Formula $p$
+\end_inset 
+
+, where 
+\begin_inset Formula $p$
+\end_inset 
+
+ is either 
+\begin_inset Formula $v$
+\end_inset 
+
+ or 
+\begin_inset Formula $U(v)$
+\end_inset 
+
+.
+ The correlation coefficient is evaluated by sampling on a set of sample
+ points in each neighbourhood.
+ The sample points are arranged on a disc of radius 
+\begin_inset Formula $R_{n}$
+\end_inset 
+
+ parallel to the tangent plane at 
+\begin_inset Formula $p$
+\end_inset 
+
+, as illustrated below.
+ 
+\layout Standard
+\align center 
+
+\begin_inset Graphics
+	filename similarity-neighbourhood.eps
+	width 100line%
+
+\end_inset 
+
+
+\layout Standard
+
+The set of sample points are: the centre of the disc, 8 points equally spaced
+ around a circle of radius 
+\begin_inset Formula $R_{n}/2$
+\end_inset 
+
+, and 16 points equally spaced on a circle of radius 
+\begin_inset Formula $R_{n}$
+\end_inset 
+
+.
+ The disc radius is 
+\begin_inset Formula \begin{equation}
+R_{n}=r_{n}d_{C},\label{eq:define-neighbourhood-radius}\end{equation}
+
+\end_inset 
+
+ where 
+\begin_inset Formula $r_{n}$
+\end_inset 
+
+ is a user-specified radius factor, and 
+\begin_inset Formula $d_{C}$
+\end_inset 
+
+ sets the distance scale based on the coarseness of the control mesh.
+ The value of 
+\begin_inset Formula $d_{C}$
+\end_inset 
+
+ is the distance, projected to the disc, from the centre of the cap to a
+ neighbouring control mesh vertex.
+ In other words, 
+\begin_inset Formula $d_{C}$
+\end_inset 
+
+ is the length of a typical control mesh edge after projecting to the disc.
+ The value of 
+\begin_inset Formula $R_{n}$
+\end_inset 
+
+ must be no greater than 1, so 
+\begin_inset Formula $r_{n}\le1/d_{C}$
+\end_inset 
+
+.
+\layout Standard
+
+The penalty 
+\begin_inset Formula $\Psi$
+\end_inset 
+
+ is also written as a sum over nodes of the control mesh, 
+\begin_inset Formula $\Psi(T-U)=a\sum_{v}\psi(||T(v)-U(v)||)$
+\end_inset 
+
+.
+ The penalty function 
+\begin_inset Formula $\psi$
+\end_inset 
+
+ is designed so that 
+\begin_inset Formula $U(v)$
+\end_inset 
+
+ is restricted to the hemisphere centred on 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+.
+ This is easily done by choosing 
+\begin_inset Formula $\psi$
+\end_inset 
+
+ such that it becomes infinite when the angle between 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+ and 
+\begin_inset Formula $U(v)$
+\end_inset 
+
+ reaches 
+\begin_inset Formula $\pi/2$
+\end_inset 
+
+.
+ 
+\layout Standard
+
+With the search space restricted to a hemisphere, it can be parameterized
+ using two variables, by projecting the points on the sphere to the tangent
+ plane at 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+.
+ Thus, 
+\begin_inset Formula $U(v)$
+\end_inset 
+
+ is obtained using a two-dimensional unconstrained optimization.
+ Points 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+ and 
+\begin_inset Formula $U(v)$
+\end_inset 
+
+ are projected to this disc and 
+\begin_inset Formula $r$
+\end_inset 
+
+ is defined as the distance between the projected points as illustrated.
+\layout Standard
+\align center 
+
+\begin_inset Graphics
+	filename search-neighbourhood.eps
+	width 100line%
+
+\end_inset 
+
+
+\layout Standard
+
+The penalty is a logarithmic barrier function 
+\begin_inset LatexCommand \cite{nocedal99:numerical-optimization}
+
+\end_inset 
+
+, 
+\begin_inset Formula $\psi=-\log(1-r^{2}/R_{s}^{2})$
+\end_inset 
+
+, which has the effect of constraining the search for 
+\begin_inset Formula $U(v)$
+\end_inset 
+
+ to points with 
+\begin_inset Formula $r<R_{s}$
+\end_inset 
+
+.
+ The disc radius is 
+\begin_inset Formula \begin{equation}
+R_{s}=r_{s}d_{T},\label{eq:define-search-radius}\end{equation}
+
+\end_inset 
+
+ where 
+\begin_inset Formula $r_{s}$
+\end_inset 
+
+ is a user-specified search radius factor, and 
+\begin_inset Formula $d_{T}$
+\end_inset 
+
+ sets the distance scale based on the control mesh.
+ The value of 
+\begin_inset Formula $d_{T}$
+\end_inset 
+
+ is the distance, projected to the disc, between 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+ and 
+\begin_inset Formula $T(u)$
+\end_inset 
+
+ where 
+\begin_inset Formula $u$
+\end_inset 
+
+ is the control-mesh neighbour closest to 
+\begin_inset Formula $v$
+\end_inset 
+
+ on the target, i.e.
+ 
+\begin_inset Formula $||T(v)-T(u)||$
+\end_inset 
+
+ is minimum for all 1-ring neighbours 
+\begin_inset Formula $u$
+\end_inset 
+
+ of 
+\begin_inset Formula $v$
+\end_inset 
+
+.
+ The value of 
+\begin_inset Formula $R_{s}$
+\end_inset 
+
+ must be no greater than 1, so 
+\begin_inset Formula $r_{s}\le1/d_{T}$
+\end_inset 
+
+.
+\layout Standard
+
+The objective function is designed to be separable so that the minimization
+ of 
+\begin_inset Formula \begin{equation}
+\phi^{v}(U(v))+a\psi(||U(v)-T(v)||)\label{eq:objective-vertex-v-2d}\end{equation}
+
+\end_inset 
+
+ is performed independently for each control mesh vertex 
+\begin_inset Formula $v$
+\end_inset 
+
+.
+ Each optimization is a 2-dimensional problem, parameterized by Cartesian
+ coordinates in the tangent plane at 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+.
+ The initial iterate is 
+\begin_inset Formula $(0,0)$
+\end_inset 
+
+ which corresponds to 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+, and is a feasible point since it corresponds to 
+\begin_inset Formula $r=0$
+\end_inset 
+
+ so the barrier function 
+\begin_inset Formula $\psi$
+\end_inset 
+
+ is zero.
+ The optimization is performed using the Nelder-Mead downhill simplex algorithm
+ 
+\begin_inset LatexCommand \cite{press88:numerical-recipes}
+
+\end_inset 
+
+ as implemented in the GNU Scientific Library 
+\begin_inset LatexCommand \cite{galassi02:gsl-book}
+
+\end_inset 
+
+.
+ The Nelder-Mead simplex algorithm is chosen because it does not require
+ derivatives of the objective function 
+\begin_inset LatexCommand \ref{eq:objective-vertex-v-2d}
+
+\end_inset 
+
+, which are complicated due to the correlation coefficient data term in
+ 
+\begin_inset Formula $\phi^{v}$
+\end_inset 
+
+.
+ 
+\layout Subsubsection
+
+Smoothing (Step 3)
+\layout Standard
+
+The smoothing, which is carried out in 
+\begin_inset Formula $\Rthree$
+\end_inset 
+
+, is a simple weighted average of 
+\begin_inset Formula $U(v)$
+\end_inset 
+
+ and the centroid of its neighbourhood, 
+\begin_inset Formula \[
+C(v)=\frac{1}{|N_{v}|}\sum_{u\in N_{v}}U(u),\]
+
+\end_inset 
+
+where 
+\begin_inset Formula $N_{v}$
+\end_inset 
+
+ is the set of neighbours of 
+\begin_inset Formula $v$
+\end_inset 
+
+.
+ The smoothed transformation is given by 
+\begin_inset Formula \[
+T(v)=\frac{U(v)+wC(v)}{||U(v)+wC(v)||},\]
+
+\end_inset 
+
+where 
+\begin_inset Formula $w$
+\end_inset 
+
+ is a user-specified smoothing weight.
+\layout Subsection
+
+Algorithm Parameters
+\layout Standard
+
+The user of this algorithm has four major parameters to specify: the search
+ radius 
+\begin_inset Formula $r_{s}$
+\end_inset 
+
+, the neighbourhood radius 
+\begin_inset Formula $r_{n}$
+\end_inset 
+
+, the penalty ratio 
+\begin_inset Formula $a$
+\end_inset 
+
+, and the smoothing weight 
+\begin_inset Formula $w$
+\end_inset 
+
+.
+ Note that the search radius and neighbourhood radius are dimensionless
+ quantities that multiply a length set by the coarseness of the control
+ mesh through Equations 
+\begin_inset LatexCommand \ref{eq:define-neighbourhood-radius}
+
+\end_inset 
+
+ and 
+\begin_inset LatexCommand \ref{eq:define-search-radius}
+
+\end_inset 
+
+, respectively.
+ Thus 
+\begin_inset Formula $r_{s}$
+\end_inset 
+
+ and 
+\begin_inset Formula $r_{n}$
+\end_inset 
+
+ can be set to a fixed value for all iterations of the outer coarse-to-fine
+ loop, as are parameters 
+\begin_inset Formula $a$
+\end_inset 
+
+ and 
+\begin_inset Formula $w$
+\end_inset 
+
+.
+\layout Section
+
+Output
+\layout Standard
+
+The output is a map 
+\begin_inset Formula $T:\Stwo\rightarrow\Stwo$
+\end_inset 
+
+, specified in a piecewise linear fashion by providing 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+ for all vertices 
+\begin_inset Formula $v$
+\end_inset 
+
+ of the control mesh.
+ The transformation at vertex 
+\begin_inset Formula $v$
+\end_inset 
+
+ is a point 
+\begin_inset Formula $T(v)\in\Stwo$
+\end_inset 
+
+.
+ However, instead of storing the Euclidean coordinates for the point 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+, the triple 
+\begin_inset Formula $(h,\alpha,\beta)$
+\end_inset 
+
+ is stored where 
+\begin_inset Formula $h$
+\end_inset 
+
+ is a halfedge (internally represented as a pointer) specifying the spherical
+ triangle of the target data mesh that contains 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+ and 
+\begin_inset Formula $(\alpha,\beta)$
+\end_inset 
+
+ are the areal coordinates (along with 
+\begin_inset Formula $\gamma\equiv1-\alpha-\beta$
+\end_inset 
+
+) locating 
+\begin_inset Formula $T(v)$
+\end_inset 
+
+ on the spherical triangle as illustrated.
+\layout Standard
+\align center 
+
+\begin_inset Graphics
+	filename surfacepoint.eps
+
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset Include \input{theory.bbl}
+preview false
+
+\end_inset 
+
+
+\the_end

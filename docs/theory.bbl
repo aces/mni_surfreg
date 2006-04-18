@@ -1,0 +1,74 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{MKAE00}
+
+\bibitem[CGA03]{cgal-web}
+CGAL.
+\newblock Computational geometry algorithms library.
+\newblock \url{http://www.cgal.org}, 2003.
+
+\bibitem[CLR90]{cormen90:intro-algorithms}
+T.H. Cormen, C.L. Leiserson, and R.L. Rivest.
+\newblock {\em Introduction to Algorithms}.
+\newblock MIT Press, 1990.
+
+\bibitem[Cox69]{coxeter69:intro-geometry}
+H.~S.~M. Coxeter.
+\newblock {\em Introduction to Geometry}.
+\newblock John Wiley and Sons, second edition, 1969.
+
+\bibitem[EM94]{edelsbrunner94:alpha-shapes}
+Herbert Edelsbrunner and Ernst~P. Mücke.
+\newblock Three-dimensional alpha shapes.
+\newblock {\em ACM Transactions on Graphics}, 13(1):43--72, 1994.
+
+\bibitem[GDT{\etalchar{+}}02]{galassi02:gsl-book}
+Mark Galassi, Jim Davies, James Theiler, Brian Gough, Gerard Jungman, Michael
+  Booth, and Fabrice Rossi.
+\newblock {\em {GNU} Scientific Library}.
+\newblock Network Theory Limited, second edition, 2002.
+\newblock Software available from
+  \url{http://www.gnu.org/software/gsl/gsl.html}.
+
+\bibitem[LMS01]{lanthier01:approx-weighted-shortest-path}
+Mark Lanthier, Anil Maheshwari, and J{\"o}rg-R{\"u}diger Sack.
+\newblock Approximating weighted shortest paths on polyhedral surfaces.
+\newblock {\em Algorithmica}, 30(4):527--562, 2001.
+
+\bibitem[MKAE00]{macdonald00:cortical-surfaces}
+David MacDonald, Noor Kabani, David Avis, and Alan~C. Evans.
+\newblock Automated 3-{D} extraction of inner and outer surfaces of cerebral
+  cortex from {MRI}.
+\newblock {\em NeuroImage}, 12:340--356, 2000.
+
+\bibitem[NW99]{nocedal99:numerical-optimization}
+Jorge Nocedal and Stephen~J. Wright.
+\newblock {\em Numerical Optimization}.
+\newblock Springer-Verlag, 1999.
+
+\bibitem[PFTV88]{press88:numerical-recipes}
+William~H. Press, Brian~P. Flannery, Saul~A. Teukolsky, and William~T.
+  Vetterling.
+\newblock {\em Numerical Recipes in C: The Art of Scientific Computing}.
+\newblock Cambridge University Press, 1988.
+
+\bibitem[RMA00]{roche00:max-likelihood}
+Alexis Roche, Gr{\'e}goire Malandain, and Nicholas Ayache.
+\newblock Unifying maximum likelihood approaches in medical image registration.
+\newblock {\em International Journal of Imaging Systems and Technology},
+  11:71--80, 2000.
+
+\bibitem[Rob04]{robbins03:phd}
+Steven~M. Robbins.
+\newblock {\em Anatomical Standardization of the Human Brain in Euclidean
+  3-Space and on the Cortical 2-Manifold}.
+\newblock PhD thesis, School of Computer Science, McGill University, Montreal,
+  QC, Canada, February 2004.
+
+\bibitem[Tau95]{taubin95:estimating-curvature}
+Gabriel Taubin.
+\newblock Estimating the tensor of curvature of a surface froma a polyhedral
+  approximation.
+\newblock In {\em Proceedings of International Conference on Computer Vision},
+  page 902, 1995.
+
+\end{thebibliography}
