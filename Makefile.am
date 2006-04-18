@@ -1,5 +1,4 @@
-SUBDIRS = . surflib registration tools 
-#doc
+SUBDIRS = . surflib registration tools docs
 
 ACLOCAL_AMFLAGS = -I m4
 
