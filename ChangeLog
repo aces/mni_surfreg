@@ -1,3 +1,11 @@
+2006-04-18  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
+
+	* docs/*: New.  Documentation.
+
+	* configure.ac: Output docs/Makefile.
+
+	* Makefile.am (SUBDIRS): Add docs.
+
 2006-04-15  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
 
 	* registration/t-surface-data-term-1.sh: Modify $PATH so that
