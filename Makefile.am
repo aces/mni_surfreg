@@ -3,6 +3,7 @@ SUBDIRS = . surflib registration tools docs
 ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = $(m4_files)					       \
+	epm-header.in          	                                       \
 	HACKING							       \
 	test/tester.cc test/tester_meshes.hpp			       \
 	test/poly_20.obj test/poly_20_flipx.sm			       \
