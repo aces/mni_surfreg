@@ -4,4 +4,4 @@
   vtk file  (i.e. in surftracc)
   or errors during write, e.g. surface-resample
 
-
+* document format of .sm file
