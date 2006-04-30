@@ -44,9 +44,6 @@ mkdir -m 700 $workdir
 trap "rm -rf $workdir" 0 1 2 15
 
 alpha=${workdir}/alpha.vv
-ch_seed=${workdir}/generate-seed-1.$$
-ch_dt=${workdir}/generate-seed-2.$$
-tmp_seed=${workdir}/generate-seed-3.$$
 seed=${workdir}/alpha_seed.vv
 
 
