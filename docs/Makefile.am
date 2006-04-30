@@ -1,4 +1,4 @@
-EXTRA_DIST = theory.lyx theory.tex theory.bbl \
+EXTRA_DIST = theory.lyx theory.bbl theory.ps \
 	quadrisection.eps \
 	mean-cortex-top.ps \
 	mean-sphere-top.ps \
@@ -16,19 +16,3 @@ EXTRA_DIST = theory.lyx theory.tex theory.bbl \
 	search-neighbourhood.eps \
 	surfacepoint.eps
 
-SUFFIXES = .tex .dvi .pdf
-
-TEXINPUTS = .:$(srcdir):
-export TEXINPUTS
-
-.PHONY: all
-all: theory.ps
-
-.tex.dvi:
-	latex $<
-	latex $<
-
-theory.ps: theory.dvi
-	dvips $? -o $@
-
-CLEANFILES = theory.log theory.aux theory.dvi theory.ps
