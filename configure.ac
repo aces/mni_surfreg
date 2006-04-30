@@ -35,7 +35,6 @@ if test "$PERL" = no; then
 dnl else check perl version ....
 fi
 
-AC_PATH_PROGS(PYTHON, [python])
 AC_PATH_PROGS(CREATE_TETRA_PATH, [create_tetra])
 AC_PATH_PROGS(BICOBJ2VTK_PATH, [bicobj2vtk])
 
@@ -91,6 +90,7 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(strtod strtol)
 
 AC_CONFIG_FILES([Makefile 
+epm-header
 docs/Makefile
 surflib/Makefile
 surflib/doc/Makefile surflib/doc/Doxyfile
