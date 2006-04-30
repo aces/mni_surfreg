@@ -1,0 +1,12 @@
+%product mni_surfreg
+%copyright 2002-2006 Steven Robbins
+%vendor McConnell Brain Imaging Centre
+%packager Steven Robbins <stever@bic.mni.mcgill.ca>
+%license COPYING
+%readme README
+%description MINC surface registration package
+%version @VERSION@
+%requires netcdf
+%requires minc
+%requires bicpl
+
