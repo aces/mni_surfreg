@@ -1,3 +1,19 @@
+		New in Version 0.4
+
+* sphere-register supports the standard BIC options like -verbose, -debug, etc.
+Debug output from surftracc is no longer emitted by default; use -debug option
+with sphere-register to obtain it.
+
+* sphere-register supports registration of input surfaces with 1280 facets,
+5120 facets, up to 320k facets.  This is detected automatically.
+
+* initial-surface-map is able to flip mapping along any of the three axes.
+Flipping along X can be useful for left-right comparison.
+
+* Documentation on the theory underlying the registration process available
+in directory doc.
+
+
 		New in Version 0.3
 
 * surface-distance-transform-1 has a new option -dt_extra

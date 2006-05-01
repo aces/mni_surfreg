@@ -1,9 +1,19 @@
+2006-04-30  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
+
+	* Release 0.4.
+
+	* registration/sphere-register.pl: Add support for surfaces from
+	1280 facets up to 320k facets.  Add option parsing and support the
+	common MINC options -verbose, -debug, -tmpdir, etc.
+
+	* epm-header.in: New.  Meta-data for creating binary packages.
+	* configure.ac: Output epm-header.
+	* Makefile.am (EXTRA_DIST): Add epm-header.in
+
 2006-04-18  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
 
 	* docs/*: New.  Documentation.
-
 	* configure.ac: Output docs/Makefile.
-
 	* Makefile.am (SUBDIRS): Add docs.
 
 2006-04-15  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
@@ -31,6 +41,11 @@
 	to pick up bicpl.
 
 	* Makefile.am (EXTRA_DIST): Add data files for testing.
+
+2006-02-06  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
+
+	* registration/initial-surface-map.cc: Add options to
+	flip mapping in X-, Y-, or Z-directions.
 
 2005-09-05  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
 
