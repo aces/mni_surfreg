@@ -6,7 +6,7 @@ LDADD = ../surflib/libsurface.la $(bic_LIBS) $(CGAL_LDFLAGS)
 
 INCLUDES = -I$(top_srcdir) @GSL_CFLAGS@
 
-EXTRA_DIST = surface-data-term-1.sh surface-data-term-2.sh sphere-register.pl \
+EXTRA_DIST = surface-data-term-1.sh sphere-register.pl \
 	t-initial-surface-map.sh t-surface-data-term-1.sh
 CLEANFILES = $(generated_scripts) $(generated_tests)
 
@@ -17,7 +17,7 @@ bin_SCRIPTS = $(generated_scripts)
 
 TESTS = $(generated_tests)
 
-generated_scripts = surface-data-term-1 surface-data-term-2 sphere-register
+generated_scripts = surface-data-term-1 sphere-register
 generated_tests = t-initial-surface-map t-surface-data-term-1
 
 surftracc_SOURCES = surftracc.cc surftracc.hpp \
