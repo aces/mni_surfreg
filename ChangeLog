@@ -1,3 +1,15 @@
+2006-11-10  Steve M. Robbins  <steve@sumost.ca>
+
+	* surflib/rotation.hpp (rotate): Reverse order of declaration for
+	rotate() overloads.  These are templated functions and "two stage
+	name lookup" requires that references not dependent on a template
+	parameter be defined at point of reference.
+
+	* tools/alpha-shape.cc: Change kernel from Cartesian<MP_Float> to
+	Exact_predicates_inexact_constructions_kernel.  The former no
+	longer works in CGAL 3.2.1 because there is no division without
+	CGAL_MP_FLOAT_ALLOW_INEXACT.
+
 2006-04-30  Steve M. Robbins  <steve@nyongwa.montreal.qc.ca>
 
 	* Release 0.4.
