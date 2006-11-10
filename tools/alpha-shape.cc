@@ -17,8 +17,7 @@
 
 #include <ParseArgv.h>
 
-#include <CGAL/Cartesian.h>
-#include <CGAL/MP_Float.h>
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Unique_hash_map.h>
 #include <CGAL/Polyhedron_3.h>
 #include <CGAL/Alpha_shape_vertex_base_3.h>
@@ -61,7 +60,8 @@ struct My_items : public CGAL::Polyhedron_items_3
 };
 
 
-typedef CGAL::Cartesian<CGAL::MP_Float>  K;
+struct K : CGAL::Exact_predicates_inexact_constructions_kernel {};
+
 typedef CGAL::Polyhedron_3<K, My_items>  Surface;
 
 typedef CGAL::Alpha_shape_euclidean_traits_3<K> Gt;
