@@ -10,6 +10,29 @@ namespace MNI {
 
 /*! \brief Rotate point about an axis.
  *
+ * This function avoids calling \c sin and \c cos functions.
+ */
+template <class R>
+inline
+CGAL::Point_3<R> rotate( const CGAL::Point_3<R>& p,
+			 const CGAL::Vector_3<R>& axis,
+			 double cos_theta,
+			 double sin_theta )
+{
+    CGAL::Vector_3<R> r = p - CGAL::ORIGIN;
+    CGAL::Vector_3<R> n( axis );
+    
+    n = n / sqrt(CGAL::to_double(n*n));
+
+    return CGAL::ORIGIN 
+	+ r * cos_theta
+	+ n * (n*r)*(1-cos_theta)
+	+ CGAL::cross_product(n,r) * sin_theta;
+}
+
+
+/*! \brief Rotate point about an axis.
+ *
  * Given point \a P, axis direction \a axis, and an angle \a theta,
  * return the point obtained by rotating \a P in the positive sense
  * about \a axis by angle \a theta.  The positive sense of rotation
@@ -30,29 +53,6 @@ CGAL::Point_3<R> rotate( const CGAL::Point_3<R>& p,
 			 double theta )
 {
     return rotate( p, axis, std::cos(theta), std::sin(theta) );
-}
-
-
-/*! \brief Rotate point about an axis.
- *
- * This function avoids calling \c sin and \c cos functions.
- */
-template <class R>
-inline
-CGAL::Point_3<R> rotate( const CGAL::Point_3<R>& p,
-			 const CGAL::Vector_3<R>& axis,
-			 double cos_theta,
-			 double sin_theta )
-{
-    CGAL::Vector_3<R> r = p - CGAL::ORIGIN;
-    CGAL::Vector_3<R> n( axis );
-    
-    n = n / sqrt(CGAL::to_double(n*n));
-
-    return CGAL::ORIGIN 
-	+ r * cos_theta
-	+ n * (n*r)*(1-cos_theta)
-	+ CGAL::cross_product(n,r) * sin_theta;
 }
 
 
