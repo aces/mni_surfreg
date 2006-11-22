@@ -1,3 +1,28 @@
+2006-11-22  Steve M. Robbins  <steve@sumost.ca>
+
+	* Version 0.5.
+
+	* tools/alpha-shape.cc: Change kernel K to filtered kernel based
+	on CGAL::Cartesian, rather than
+	Exact_predicates_inexact_constructions_kernel which uses
+	Simple_cartesian.  We need handle/rep kernel in order to use
+	K::Point_3 as map key.
+
+	* surflib/test/tester_approx.hpp: Rmove now-unused specialization
+	of assertion_traits<double>.
+
+	* surflib/test/t_surface_algebra.cc:
+	* surflib/test/t_Vector_s.cc:
+	* surflib/test/t_ShortestPathQuery.cc:
+	* surflib/test/t_Point_s.cc: 
+	* surflib/test/t_Facet_coordinate_frame.cc: Use
+	Halfedge::halfedge(), t1(), etc rather than directly accessing
+	member variable.  Use CPPUNIT_ASSERT_DOUBLES_EQUAL() rather than
+	CPPUNIT_ASSERT_EQUAL() with specialized assertion_traits<double>.
+
+	* surflib/test/Makefile.am: Add -DCGAL_MP_FLOAT_ALLOW_INEXACT to
+	allow dividing an MP_Float by a double; required for some tests.
+
 2006-11-10  Steve M. Robbins  <steve@sumost.ca>
 
 	* surflib/rotation.hpp (rotate): Reverse order of declaration for
