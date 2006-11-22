@@ -146,8 +146,8 @@ public:
 
 	// Test add_vector(double,double)
 	Point_s z = p.displace( 0.1, 0.2 );
-	CPPUNIT_ASSERT_EQUAL( 0.3, z.t1() );
-	CPPUNIT_ASSERT_EQUAL( 0.4, z.t2() );
+	CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.3, z.t1(), equality_tolerance );
+	CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.4, z.t2(), equality_tolerance );
 
 	Vector_s v( find_edge(1,2), 0.2, 0.2 );  // (2,2,0)
 	

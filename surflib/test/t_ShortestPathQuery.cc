@@ -154,12 +154,12 @@ public:
 	// must be on one of the two facets.
 	if ( &* c.halfedge()->facet() == &* a.halfedge()->facet() ) {
 	    double d_ac = sqrt(CGAL::to_double(squared_distance(a,c)));
-	    CPPUNIT_ASSERT_EQUAL( dist/2.0, d_ac );
+	    CPPUNIT_ASSERT_DOUBLES_EQUAL( dist/2.0, d_ac, equality_tolerance );
 	} else {
 	    CPPUNIT_ASSERT( &* c.halfedge()->facet() 
 			    == &* b.halfedge()->facet() );
 	    double d_bc = sqrt(CGAL::to_double(squared_distance(b,c)));
-	    CPPUNIT_ASSERT_EQUAL( dist/2.0, d_bc );
+	    CPPUNIT_ASSERT_DOUBLES_EQUAL( dist/2.0, d_bc, equality_tolerance );
 	}
     }	
 
