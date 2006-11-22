@@ -156,9 +156,6 @@ private:
 
     MNI::Statistic<double> visits;
     MNI::Histogram<int> search_length;
-
-    // Unit tests.
-    friend class t_ShortestPathQuery;
 };
 
 
