@@ -32,8 +32,6 @@ struct Polyhedron_items_3 : public CGAL::Polyhedron_items_3
 };
 
 
-//typedef CGAL::Simple_cartesian<CGAL::MP_Float>   Surface_kernel;
-
 typedef CGAL::Polyhedron_3<CGAL::Simple_cartesian<double>,
 			   Polyhedron_items_3>  Surface_double;
 
