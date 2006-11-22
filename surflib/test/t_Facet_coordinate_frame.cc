@@ -43,7 +43,7 @@ public:
     void constructors() 
     {
 	Frame f(h_ab);
-	CPPUNIT_ASSERT( &* f.h == &* h_ab );
+	CPPUNIT_ASSERT( &* f.halfedge() == &* h_ab );
     }
 
 
@@ -94,8 +94,8 @@ public:
 
 	double u,v;
 	f.coordinates_of( vec, &u, &v );
-	CPPUNIT_ASSERT_EQUAL( t1, u );
-	CPPUNIT_ASSERT_EQUAL( t2, v );
+	CPPUNIT_ASSERT_DOUBLES_EQUAL( t1, u, equality_tolerance );
+	CPPUNIT_ASSERT_DOUBLES_EQUAL( t2, v, equality_tolerance );
     }
 
 
