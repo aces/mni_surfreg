@@ -35,27 +35,6 @@ namespace CppUnit {
 	}
     };
 
-    template<>    
-    struct assertion_traits<double>
-    {
-	static inline bool equal( double a, double b )
-	{
-	    double diff = a - b;
-	    if (fabs(diff) < equality_tolerance)
-		return true;
-	    std::cout << a << " - " << b << " = " << diff
-		 << " >= " << equality_tolerance << std::endl;
-	    return false;
-	}
-
-      static std::string toString( double x )
-      {
-          OStringStream ost;
-          ost << "[approx] " << x;
-          return ost.str();
-      }
-    };
-
     template <class R>
     struct assertion_traits<CGAL::Point_3<R> > 
 	: public cgal_assertion_traits<CGAL::Point_3<R> >
