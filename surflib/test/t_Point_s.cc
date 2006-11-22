@@ -44,8 +44,8 @@ public:
     void constructors() 
     {
 	Point_s p( h_ab, 0.5,0.5 );
-	CPPUNIT_ASSERT_EQUAL( 0.5, p._t1 );
-	CPPUNIT_ASSERT_EQUAL( 0.5, p._t2 );
+	CPPUNIT_ASSERT_EQUAL( 0.5, p.t1() );
+	CPPUNIT_ASSERT_EQUAL( 0.5, p.t2() );
 
 	Vertex_const_handle v = surf.vertices_begin();
 	p = Point_s(v);

@@ -42,8 +42,8 @@ public:
     void constructors() 
     {
 	Vector_s v( h_ab, 1,1 );
-	CPPUNIT_ASSERT_EQUAL( 1.0, v._t1 );
-	CPPUNIT_ASSERT_EQUAL( 1.0, v._t2 );
+	CPPUNIT_ASSERT_EQUAL( 1.0, v.t1() );
+	CPPUNIT_ASSERT_EQUAL( 1.0, v.t2() );
     }
 
 
