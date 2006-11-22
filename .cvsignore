@@ -8,3 +8,5 @@ config.log config.status
 configure
 libtool
 stamp-h1
+epm-header
+
