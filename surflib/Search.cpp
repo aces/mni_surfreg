@@ -16,8 +16,9 @@ VertexWalkSearch<Vertex,VertexFunctor>::search( Vertex_const_handle v )
 	CGAL_For_all( hc, v->vertex_begin() ) {
 	    //typename Vertex::Halfedge_const_handle h = hc;
 	    double value = f( hc->opposite()->vertex() );
-
-	    if ( value < best_value ) {
+            // This test is safer on RedHat to give good results (Claude).
+            double diff = value - best_value;
+            if ( 1.0 + diff < 1.0 ) {
 		best_value = value;
 		best_vertex = hc->opposite()->vertex();
 	    }

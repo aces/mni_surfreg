@@ -1,3 +1,11 @@
+
+2007-03-16  Claude Lepage <claude@bic.mni.mcgill.ca>
+
+	* Version 0.5.1.
+
+	* Make arithmetic test in surflib/Search.cpp less sensitive to
+        truncation error (would cause endless loop on RedHat systems).
+
 2006-11-22  Steve M. Robbins  <steve@sumost.ca>
 
 	* Version 0.5.
