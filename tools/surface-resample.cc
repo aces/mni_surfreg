@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #include <iostream>
 
 #include <CGAL/Simple_cartesian.h>

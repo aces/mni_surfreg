@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef FILEREADER_H  // -*- C++ -*-
 #define FILEREADER_H
 

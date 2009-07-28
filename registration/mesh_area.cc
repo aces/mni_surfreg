@@ -1,6 +1,10 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #include "surftracc.hpp"
-
-
 
 /* Return normalized area of control facet: target over source.
  */

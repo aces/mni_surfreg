@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef MNI_SURFLIB_BARYCENTRIC_HPP
 #define MNI_SURFLIB_BARYCENTRIC_HPP
 

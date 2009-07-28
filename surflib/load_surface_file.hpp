@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef LOAD_SURFACE_FILE_HPP
 #define LOAD_SURFACE_FILE_HPP
 

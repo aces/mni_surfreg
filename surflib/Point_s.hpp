@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef POINT_S_H  // -*- C++ -*-
 #define POINT_S_H
 

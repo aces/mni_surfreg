@@ -8,6 +8,7 @@ LDADD = ../surflib/libsurface.la $(bic_LIBS) $(CGAL_LDFLAGS)
 
 bin_PROGRAMS = \
 	alpha-shape \
+        depth_potential \
 	surface-curvature \
 	evaluate-between-surfaces \
 	label-connected-regions \
@@ -29,6 +30,7 @@ EXTRA_DIST = Surface.hpp t_alpha_shape.sh t_surface_distance_transform.sh
 CLEANFILES = t_alpha_shape t_surface_distance_transform
 
 alpha_shape_SOURCES = alpha-shape.cc
+depth_potential_SOURCES = depth_potential.c
 surface_curvature_SOURCES = surface-curvature.cc
 evaluate_between_surfaces_SOURCES = evaluate-between-surfaces.cc
 label_connected_regions_SOURCES = label-connected-regions.cc 

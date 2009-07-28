@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef SURFACEMAP_H    // -*- C++ -*-
 #define SURFACEMAP_H
 

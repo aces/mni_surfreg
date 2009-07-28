@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/double.h>
 #include <CGAL/Polyhedron_3.h>

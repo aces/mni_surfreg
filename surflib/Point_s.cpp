@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 // -*- C++ -*-
 
 #include <surflib/Barycentric.hpp>

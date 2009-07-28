@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 /* This file is a convenience for defining a surface structure
  * that contains two data items at each vertex:
  *

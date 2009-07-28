@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #include <exception>
 #include <CGAL/Point_3.h>
 #include <CGAL/HalfedgeDS_items_decorator.h>

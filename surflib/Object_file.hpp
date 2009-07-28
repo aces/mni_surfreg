@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef MNI_OBJFILE_H         // -*- C++ -*-
 #define MNI_OBJFILE_H
 

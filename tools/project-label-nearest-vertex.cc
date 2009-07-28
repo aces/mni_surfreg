@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 /* Input: MINC label file
  *        cortical surface, s
  *        numerical label, L

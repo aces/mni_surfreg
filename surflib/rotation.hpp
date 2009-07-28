@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef SURFLIB_ROTATION_HPP
 #define SURFLIB_ROTATION_HPP
 

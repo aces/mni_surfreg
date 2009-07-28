@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 
 template <class SourceMesh_,class TargetMesh_>
 MNI::SurfaceMap_hds<SourceMesh_,TargetMesh_>

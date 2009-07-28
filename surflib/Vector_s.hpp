@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef VECTOR_S_H  // -*- C++ -*-
 #define VECTOR_S_H
 

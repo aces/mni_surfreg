@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef VTK_OSTREAM_H  // -*- C++ -*-
 #define VTK_OSTREAM_H  
 

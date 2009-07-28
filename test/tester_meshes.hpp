@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #include <CGAL/Polyhedron_incremental_builder_3.h>
 
 

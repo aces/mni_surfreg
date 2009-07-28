@@ -19,6 +19,10 @@
 #    AND have upper threshold greater than alpha=100 
 #    are selected as seed points.
 #
+# Copyright Alan C. Evans
+# Professor of Neurology
+# McGill University
+#
 
 set -e
 

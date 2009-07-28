@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #include <iostream>
 
 #include <surflib/Diagnostic_ostream.hpp>

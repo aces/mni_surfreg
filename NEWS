@@ -1,3 +1,46 @@
+		New in Version 0.6
+
+* New license Copyright Alan C. Evans
+
+* Add depth_potential by Maxime Boucher
+
+		New in Version 0.5.1
+
+* Make arithmetic test in surflib/Search.cpp less sensitive to
+  truncation error (would cause endless loop on RedHat systems).
+
+		New in Version 0.5
+
+* tools/alpha-shape.cc: Change kernel K to filtered kernel based on
+  CGAL::Cartesian, rather than Exact_predicates_inexact_constructions_kernel 
+  which uses Simple_cartesian.  We need handle/rep kernel in order to use
+  K::Point_3 as map key.
+
+* surflib/test/tester_approx.hpp: Rmove now-unused specialization
+  of assertion_traits<double>.
+
+* surflib/test/t_surface_algebra.cc:
+* surflib/test/t_Vector_s.cc:
+* surflib/test/t_ShortestPathQuery.cc:
+* surflib/test/t_Point_s.cc:
+* surflib/test/t_Facet_coordinate_frame.cc: Use
+  Halfedge::halfedge(), t1(), etc rather than directly accessing
+  member variable.  Use CPPUNIT_ASSERT_DOUBLES_EQUAL() rather than
+  CPPUNIT_ASSERT_EQUAL() with specialized assertion_traits<double>.
+
+* surflib/test/Makefile.am: Add -DCGAL_MP_FLOAT_ALLOW_INEXACT to
+  dividing an MP_Float by a double; required for some tests.
+
+* surflib/rotation.hpp (rotate): Reverse order of declaration for
+  () overloads.  These are templated functions and "two stage
+  lookup" requires that references not dependent on a template
+  parameter be defined at point of reference.
+
+* tools/alpha-shape.cc: Change kernel from Cartesian<MP_Float> to
+  Exact_predicates_inexact_constructions_kernel.  The former no
+  longer works in CGAL 3.2.1 because there is no division without
+  CGAL_MP_FLOAT_ALLOW_INEXACT.
+
 		New in Version 0.4
 
 * sphere-register supports the standard BIC options like -verbose, -debug, etc.

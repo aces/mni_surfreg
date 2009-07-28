@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef DISJOINT_VERTEX_SETS_HPP
 #define DISJOINT_VERTEX_SETS_HPP
 

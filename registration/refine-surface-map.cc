@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 /* Refine control grid of surface map.
  *
  * Inputs: 
@@ -124,6 +130,9 @@ int main( int ac, char* av[] )
     if ( ac != 5 ) {
 	std::cerr << "usage: " << av[0] << " map control target output" 
 		  << std::endl;
+        std::cerr << std::endl << "Copyright Alan C. Evans" << std::endl
+                               << "Professor of Neurology" << std::endl
+                               << "McGill University" << std::endl;
 	return 1;
     }
 

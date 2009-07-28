@@ -1,3 +1,8 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
 // Similarity between two sequences.
 
 /*! \brief Correlation coefficient between two sequences.

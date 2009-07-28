@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 // NOTE: ASSERT takes EXPECTED then ACTUAL
 
 #include <cppunit/TestAssert.h>

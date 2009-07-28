@@ -1,4 +1,4 @@
-AC_INIT([MNI SurfReg],[0.5.1],[stever@bic.mni.mcgill.ca],[mni_surfreg])
+AC_INIT([MNI SurfReg],[0.6.0],[stever@bic.mni.mcgill.ca],[mni_surfreg])
 AC_CONFIG_SRCDIR([surflib/SurfaceMapBase.hpp])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS([config.h])
@@ -49,7 +49,7 @@ AM_CONDITIONAL(HAVE_DOXYGEN, test "$DOXYGEN" = doxygen)
 #------------------------------------------------------------------------
 
 # Locate CppUnit for testing
-AM_PATH_CPPUNIT(1.8.0)
+# AM_PATH_CPPUNIT(1.8.0)
 AM_CONDITIONAL(HAVE_CPPUNIT, test "$CPPUNIT_LIBS")
 
 smr_LIBS=

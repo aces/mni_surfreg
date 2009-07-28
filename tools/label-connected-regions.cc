@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 /* Read file containing a label value for each vertex.  Identify
  * connected components of the vertex graph for which each vertex has
  * the same label.  Output new file with the regions labelled from

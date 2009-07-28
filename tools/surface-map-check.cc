@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 /* Check that two surface maps are the same (or close).
  * Report differences, e.g. largest difference in t1, t2 values.
  */

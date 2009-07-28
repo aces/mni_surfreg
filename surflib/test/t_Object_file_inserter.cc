@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #include "tester.hpp"
 
 #include <surflib/Object_file_inserter.hpp>

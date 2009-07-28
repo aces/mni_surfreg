@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef SHORTEST_PATH_QUERY_HPP
 #define SHORTEST_PATH_QUERY_HPP
 

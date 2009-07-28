@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef SURFLIB_SURFACEMAPBASE_HPP
 #define SURFLIB_SURFACEMAPBASE_HPP
 

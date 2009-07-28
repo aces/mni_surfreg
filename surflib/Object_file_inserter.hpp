@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef MNI_OBJECT_FILE_INSERTER_H // -*- C++ -*-
 #define MNI_OBJECT_FILE_INSERTER_H
 

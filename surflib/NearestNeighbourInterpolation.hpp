@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef NEARESTNEIGHBOUR_INTERPOLATION_HPP
 #define NEARESTNEIGHBOUR_INTERPOLATION_HPP
 

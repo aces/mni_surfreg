@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef LINEAR_INTERPOLATION_H   // -*- C++ -*-
 #define LINEAR_INTERPOLATION_H
 

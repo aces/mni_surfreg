@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef MNI_SURFLIB_DIAGNOSTIC_OSTREAM_HPP
 #define MNI_SURFLIB_DIAGNOSTIC_OSTREAM_HPP
 

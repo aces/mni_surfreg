@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef FACET_COORDINATE_FRAME_H  // -*- C++ -*-
 #define FACET_COORDINATE_FRAME_H
 

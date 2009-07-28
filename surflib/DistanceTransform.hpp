@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef MNI_SURFLIB_DISTANCE_TRANSFORM_HPP   // -*- C++ -*-
 #define MNI_SURFLIB_DISTANCE_TRANSFORM_HPP
 

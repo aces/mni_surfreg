@@ -1,3 +1,8 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
 #include <surflib/LinearInterpolation.hpp>
 #include <surflib/rotation.hpp>
 

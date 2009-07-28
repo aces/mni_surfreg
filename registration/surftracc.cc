@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 /* Optimize a surface mapping.
  *
  * Inputs:
@@ -270,6 +276,9 @@ int main( int ac, char* av[] )
 	     << " target_geom target_data"
 	     << " control in.sm out.sm"
 	     << endl;
+        cerr << endl << "Copyright Alan C. Evans" << endl
+                     << "Professor of Neurology" << endl
+                     << "McGill University" << endl;
 	return 1;
     }
 

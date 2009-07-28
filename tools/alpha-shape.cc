@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 /* Compute the alpha shape, write classification of vertices.
  * See README.alpha-shape for some definitions.
  *

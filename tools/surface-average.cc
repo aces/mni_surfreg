@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 /* Compute mean and standard deviation for a set of co-registered
  * surfaces.
  *

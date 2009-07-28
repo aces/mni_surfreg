@@ -1,3 +1,8 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
 /* Generate initial surface mapping
  * (vertex 0 --> vertex 0, vertex 1 --> vertex 1)
  * from control and target surface files.
@@ -89,6 +94,9 @@ int main( int ac, char* av[] )
     if ( ParseArgv( &ac, av, argTable, 0 ) || ac != 4 ) {
 	std::cerr << "usage: " << av[0] << " control target output" 
 		  << "\n";
+        std::cerr << std::endl << "Copyright Alan C. Evans" << std::endl
+                               << "Professor of Neurology" << std::endl
+                               << "McGill University" << std::endl;
 	return 1;
     }
 

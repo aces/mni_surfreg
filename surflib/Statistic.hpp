@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #ifndef BIC_STATISTIC_H
 #define BIC_STATISTIC_H
 

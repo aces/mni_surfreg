@@ -1,5 +1,11 @@
 #! /bin/sh
 
+#
+# Copyright Alan C. Evans
+# Professor of Neurology
+# McGill University
+#
+
 set -e
 
 # Put ../tools on PATH so that alpha-shape and

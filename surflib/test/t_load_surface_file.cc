@@ -1,3 +1,9 @@
+/*
+   Copyright Alan C. Evans
+   Professor of Neurology
+   McGill University
+*/
+
 #include <CGAL/utility.h>
 #include <surflib/load_surface_file.hpp>
 #include <surflib/surface_checking.hpp>

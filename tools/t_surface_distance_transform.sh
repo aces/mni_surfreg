@@ -1,5 +1,11 @@
 #! /bin/sh
 
+#
+# Copyright Alan C. Evans
+# Professor of Neurology
+# McGill University
+#
+
 set -e
 
 
