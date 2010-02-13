@@ -1,3 +1,9 @@
+2010-02-14  Andrew L Janke  <a.janke@gmail.com>
+
+ * Version 0.6.1
+ * changes for gcc 4.3
+
+
 2009-07-28  Claude Lepage      <claude@bic.mni.mcgill.ca>
 
 	* Version 0.6.0.

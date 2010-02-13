@@ -34,7 +34,7 @@ public:
     typedef SourceMesh_ ControlMesh;
 
     typedef typename SourceMesh::Vertex_const_handle    Vertex_const_handle;
-    typedef Point_s<TargetMesh>                         Point_s;
+    typedef Point_s<TargetMesh>                         Point_s_;
 
 
     /*! Implicitly set control grid to be a copy of the source
@@ -54,7 +54,7 @@ public:
 	    t( this->target.vertices_begin(), this->target.vertices_end() );
 
 	while( s != this->source.vertices_end() ) {
-	    (*this)[s] = Point_s(&*t);
+	    (*this)[s] = Point_s_(&*t);
 	    ++s;
 	    ++t;
 	}
@@ -82,18 +82,18 @@ public:
     Vertex_const_handle get_source( Vertex_const_handle v ) const
     { return v; }
 
-    Point_s& get_target( Vertex_const_handle v )
+    Point_s_& get_target( Vertex_const_handle v )
     {  return vertex_map[v];  }
 
-    const Point_s& get_target( Vertex_const_handle v ) const
+    const Point_s_& get_target( Vertex_const_handle v ) const
     {  return vertex_map[v];  }
 
 
     //! Convenience notation for get_target().
-    Point_s& operator[] ( Vertex_const_handle v )
+    Point_s_& operator[] ( Vertex_const_handle v )
     {  return get_target(v);  }
 
-    const Point_s& operator[] ( Vertex_const_handle v ) const
+    const Point_s_& operator[] ( Vertex_const_handle v ) const
     {  return get_target(v);  }
 
 
@@ -106,7 +106,7 @@ public:
 private:
     // For the source only, we store the transformation
     // info at each vertex.
-    CGAL::Unique_hash_map<Vertex_const_handle,Point_s> vertex_map;
+    CGAL::Unique_hash_map<Vertex_const_handle,Point_s_> vertex_map;
 };
 
 

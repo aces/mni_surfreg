@@ -6,7 +6,6 @@
 %readme README
 %description MINC surface registration package
 %version @VERSION@
-%requires netcdf
 %requires minc
 %requires bicpl
 
