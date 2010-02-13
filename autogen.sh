@@ -6,7 +6,7 @@ The required m4 files were not found.
 You need to check these out from their repository
 using
 
-    cvs -d /software/source checkout -d m4 libraries/mni-acmacros
+    cvs -d cvs.bic.mni.mcgill.ca:/private-cvsroot checkout -d m4 libraries/mni-acmacros
 
 (yes, two '-d' options)
 Then re-run autogen.sh.
@@ -30,6 +30,6 @@ EOF
 aclocal -I m4
 autoheader
 libtoolize --automake
-automake --add-missing
+automake --add-missing --copy
 autoconf
 
