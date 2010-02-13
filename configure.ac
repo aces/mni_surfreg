@@ -1,5 +1,5 @@
 
-AC_INIT([MNI SurfReg],[0.6.1],[stever@bic.mni.mcgill.ca],[mni_surfreg])
+AC_INIT([MNI SurfReg],[0.6.2],[stever@bic.mni.mcgill.ca],[mni_surfreg])
 AC_CONFIG_SRCDIR([surflib/SurfaceMapBase.hpp])
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS([config.h])
