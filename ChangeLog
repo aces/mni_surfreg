@@ -1,8 +1,20 @@
+2012-11-16 Tarek Sherif <tsherif@bic.mni.mcgill.ca>
+
+        * Version 0.6.2
+        * Compiles with gcc 4.6.3 (should use Boost 1.48.0, CGAL 3.3.1)
+        * SurfaceMap_hash.hpp: changed Point_s typedef to Point_s_tm to 
+          avoid naming collision.
+        * ShortestPathQuery.hpp: changed Point_s typedef to Point_s_surf 
+          and Vector_s to Venctor_s_surf to avoid naming collision.
+        * ShortestPathQuery.cpp: changed Point_s typedef to Point_s_surf 
+          and Vector_s to Venctor_s_surf to avoid naming collision.
+        * SurfaceMap.hpp: changed Point_s typedef to Point_s_tm to avoid 
+          naming collision.
+
 2010-02-14  Andrew L Janke  <a.janke@gmail.com>
 
- * Version 0.6.1
- * changes for gcc 4.3
-
+        * Version 0.6.1
+        * changes for gcc 4.3
 
 2009-07-28  Claude Lepage      <claude@bic.mni.mcgill.ca>
 

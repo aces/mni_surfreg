@@ -434,4 +434,3 @@ find_common_facet( const Point_s<_surface>& p,
 }
 
 }
-

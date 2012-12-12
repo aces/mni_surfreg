@@ -11,7 +11,7 @@ all-local: dox
 # source files.  Until that is fixed, do "make clean" before "make"
 # if you want docs for updated sources.
 html/index.html: Doxyfile
-	@DOXYGEN@
+	@DOXYGEN@ -u
 
 
 clean-local:

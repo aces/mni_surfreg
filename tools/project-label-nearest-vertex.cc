@@ -123,7 +123,7 @@ void get_label_point_list( char* fn,
 			   std::vector<Point_3>& points )
 {
     // We need to get all volumes in x-y-z ordering
-    static char* dimensions[] = { MIxspace, MIyspace, MIzspace };
+    static char* dimensions[] = { (char*)MIxspace, (char*)MIyspace, (char*)MIzspace };
 
     Volume vol;
     if ( input_volume( fn, 3, dimensions,

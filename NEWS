@@ -1,5 +1,9 @@
+		New in Version 0.6.2
 
-		New in Version 0.6
+* fixes for gcc 4.6.3
+* should link with Boost 1.48.0 and CGAL 3.3.1
+
+		New in Version 0.6.1
 
 * fixes for gcc 4.3
 

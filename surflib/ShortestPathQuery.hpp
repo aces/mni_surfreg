@@ -38,8 +38,8 @@ public:
     typedef typename Surface::Halfedge_const_handle    Halfedge_const_handle;
     typedef typename Surface::Halfedge_const_iterator  Halfedge_const_iterator;
 
-    typedef Point_s<Surface>                           Point_s;
-    typedef Vector_s<Surface>                          Vector_s;
+    typedef Point_s<Surface>                           Point_s_surf;
+    typedef Vector_s<Surface>                          Vector_s_surf;
     typedef typename Surface::Point_3                  Point_3;
  
 
@@ -52,23 +52,23 @@ public:
     
 
     //! Find path from s to t.  Returns length.
-    double find_path( const Point_s& s, const Point_s& t,
-		      std::vector<Point_s>& pathlist );
+    double find_path( const Point_s_surf& s, const Point_s_surf& t,
+		      std::vector<Point_s_surf>& pathlist );
 
     //! Find point a given distance along path.
-    Point_s pathpoint_distance( const std::vector<Point_s>& pathlist,
+    Point_s_surf pathpoint_distance( const std::vector<Point_s_surf>& pathlist,
 				double distance );
 
     //! Find point a given distance along path from s to t.
-    Point_s pathpoint_distance( const Point_s& s, const Point_s& t,
+    Point_s_surf pathpoint_distance( const Point_s_surf& s, const Point_s_surf& t,
 				double distance );
 
     //! Find point a given fraction along path from s to t.
-    Point_s pathpoint_fraction( const Point_s& s, const Point_s& t,
+    Point_s_surf pathpoint_fraction( const Point_s_surf& s, const Point_s_surf& t,
 				double fraction );
 
     //! Return midpoint of path from s to t.
-    Point_s midpoint( const Point_s& s, const Point_s& t);
+    Point_s_surf midpoint( const Point_s_surf& s, const Point_s_surf& t);
 
 
 
@@ -87,7 +87,7 @@ public:
     int vertex_index( Vertex_const_handle v ) const;
     int vertex_index( Halfedge_const_handle h, int i ) const;
 
-    Point_s vertex_location( int index ) const;
+    Point_s_surf vertex_location( int index ) const;
     Point_3 vertex_location_3( int index ) const
 	{ return vertex_location(index).point(); }
 
@@ -112,7 +112,7 @@ public:
 
 
     //! Dump debugging info about the path.
-    void dump_path( const std::vector<Point_s>& pathlist );
+    void dump_path( const std::vector<Point_s_surf>& pathlist );
 
 
     const Graph& get_graph() const 
@@ -128,7 +128,7 @@ public:
 private:
 
     //! Connect this point to all the vertices around the facet.
-    void set_terminal_point( vertex_descriptor v, const Point_s& p );
+    void set_terminal_point( vertex_descriptor v, const Point_s_surf& p );
     
     class FoundTarget {};
 
@@ -155,7 +155,7 @@ private:
     CGAL::Unique_hash_map<Halfedge_const_handle,int> halfedge_index_map;
 
     // Map from graph to surface.
-    std::vector<Point_s>  point_of_vertex;
+    std::vector<Point_s_surf>  point_of_vertex;
 
     int additional_vertex_offset;
     int vertices_per_edge;

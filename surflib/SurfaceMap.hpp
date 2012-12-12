@@ -33,7 +33,7 @@ public:
     typedef typename Surface::Vertex_const_handle    Vertex_const_handle;
     typedef typename Surface::Vertex_const_iterator  Vertex_const_iterator;
 
-    typedef Point_s<Surface>                         Point_s;
+    typedef Point_s<Surface>                         Point_s_surf;
 
 
     SurfaceMap( const Surface& source_surf, const Surface& target_surf )

@@ -402,7 +402,7 @@ int main( int ac, char* av[] )
 			      current_search_radius, sr_factor ) ) {
 		++outer_iter;
 		repeat_count = 0;
-		report_displacement_mag( "TOTAL ", smap, map_start );
+		report_displacement_mag( (char*)"TOTAL ", smap, map_start );
 	    } else {
 		if ( repeat_count == 20 ) {
 		    cerr << "Repeated current iteration 20 times."

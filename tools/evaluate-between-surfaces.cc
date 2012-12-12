@@ -41,7 +41,7 @@ public:
 	: outside_value(out_value)
     {
 	// We need to get all volumes in x-y-z ordering
-	static char* dimensions[] = { MIxspace, MIyspace, MIzspace };
+	static char* dimensions[] = { (char*)MIxspace, (char*)MIyspace, (char*)MIzspace };
 
 	if ( input_volume( fn, 3, dimensions,
 			   MI_ORIGINAL_TYPE, 0, 0, 0,

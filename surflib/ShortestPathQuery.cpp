@@ -36,7 +36,7 @@ ShortestPathQuery<_surface>::ShortestPathQuery( const _surface& s,
     Vertex_const_iterator v = surface.vertices_begin();
     for( int i = 0; v != surface.vertices_end(); ++v,++i ) {
 	vertex_index_map[v] = i;
-	point_of_vertex[i] = Point_s(v);
+	point_of_vertex[i] = Point_s_surf(v);
     }
     point_of_vertex[search_source()] = point_of_vertex[0];
     point_of_vertex[search_target()] = point_of_vertex[0];
@@ -54,7 +54,7 @@ ShortestPathQuery<_surface>::ShortestPathQuery( const _surface& s,
 	    int index = vertex_index(h,k);
 	    CGAL_assertion( index >= additional_vertex_offset );
 	    double t1 = double(k+1)/double(1+vertices_per_edge);
-	    point_of_vertex[index] = Point_s(h,t1,0);
+	    point_of_vertex[index] = Point_s_surf(h,t1,0);
 	}
     }
 
@@ -102,8 +102,8 @@ ShortestPathQuery<_surface>::~ShortestPathQuery()
 
 template <class _surface>
 double
-ShortestPathQuery<_surface>::find_path( const Point_s& s, const Point_s& t,
-					std::vector<Point_s>& pathlist )
+ShortestPathQuery<_surface>::find_path( const Point_s_surf& s, const Point_s_surf& t,
+					std::vector<Point_s_surf>& pathlist )
 {
     if ( &* s.halfedge()->facet() == &* t.halfedge()->facet() ) {
 	// Treat this case special, because we do not add the edge
@@ -153,15 +153,15 @@ ShortestPathQuery<_surface>::find_path( const Point_s& s, const Point_s& t,
 template <class _surface>
 Point_s<_surface>
 ShortestPathQuery<_surface>::pathpoint_distance
-( const std::vector<Point_s>& path,
+( const std::vector<Point_s_surf>& path,
   double distance )
 {
     CGAL_precondition( path.size() > 0 );
     if (path.size() == 1 || distance == 0)
 	return path[0];
     
-    typename std::vector<Point_s>::const_iterator pi = path.begin();
-    typename std::vector<Point_s>::const_iterator pi_prev = pi;
+    typename std::vector<Point_s_surf>::const_iterator pi = path.begin();
+    typename std::vector<Point_s_surf>::const_iterator pi_prev = pi;
     double cumulative_dist = 0;
     double segment_length = 0;
 
@@ -190,8 +190,8 @@ ShortestPathQuery<_surface>::pathpoint_distance
     // point = b(pi_prev) + (1-b)(pi) = (pi) + b(pi_prev - pi)
 
     /* Should be able to do this on the surface ...
-    Vector_s d = (*pi) - (*pi_prev);
-    Point_s p = *pi_prev + d*((cumulative_dist-distance)/segment_length);
+    Vector_s_surf d = (*pi) - (*pi_prev);
+    Point_s_surf p = *pi_prev + d*((cumulative_dist-distance)/segment_length);
     return p;
     */
 
@@ -206,19 +206,19 @@ ShortestPathQuery<_surface>::pathpoint_distance
     }
     typename Surface::Traits::Vector_3 d = pi_prev->point() - pi->point();
     Point_3 p = pi->point() + d*((cumulative_dist-distance)/segment_length);
-    return Point_s(h,p);
+    return Point_s_surf(h,p);
 }
 
 
 template <class _surface>
 inline Point_s<_surface>
-ShortestPathQuery<_surface>::pathpoint_distance( const Point_s& s, 
-						 const Point_s& t,
+ShortestPathQuery<_surface>::pathpoint_distance( const Point_s_surf& s, 
+						 const Point_s_surf& t,
 						 double distance )
 {
     CGAL_precondition( distance >= 0 );
 
-    std::vector<Point_s> path;
+    std::vector<Point_s_surf> path;
     double pathlength = find_path(s,t,path);
 
     CGAL_precondition( distance <= pathlength );
@@ -229,14 +229,14 @@ ShortestPathQuery<_surface>::pathpoint_distance( const Point_s& s,
 
 template <class _surface>
 inline Point_s<_surface>
-ShortestPathQuery<_surface>::pathpoint_fraction( const Point_s& s, 
-						 const Point_s& t,
+ShortestPathQuery<_surface>::pathpoint_fraction( const Point_s_surf& s, 
+						 const Point_s_surf& t,
 						 double fraction )
 {
     CGAL_precondition( fraction >= 0 );
     CGAL_precondition( fraction <= 1 );
 
-    std::vector<Point_s> path;
+    std::vector<Point_s_surf> path;
     double pathlength = find_path(s,t,path);
     return pathpoint_distance( path, fraction*pathlength );
 }
@@ -244,7 +244,7 @@ ShortestPathQuery<_surface>::pathpoint_fraction( const Point_s& s,
 
 template <class _surface>
 inline Point_s<_surface>
-ShortestPathQuery<_surface>::midpoint( const Point_s& s, const Point_s& t )
+ShortestPathQuery<_surface>::midpoint( const Point_s_surf& s, const Point_s_surf& t )
 {
     return pathpoint_fraction(s,t,0.5);
 }
@@ -371,10 +371,10 @@ void dump_vertex( const char* name,
 
 template <class _surface>
 void
-ShortestPathQuery<_surface>::dump_path( const std::vector<Point_s>& pathlist )
+ShortestPathQuery<_surface>::dump_path( const std::vector<Point_s_surf>& pathlist )
 {
     int i = 0;
-    typename std::vector<Point_s>::const_iterator pi = pathlist.begin();
+    typename std::vector<Point_s_surf>::const_iterator pi = pathlist.begin();
     CGAL_For_all(pi,pathlist.end()) {
 	std::cerr << "Point " << i++
 		  << ": " << *pi 
@@ -417,7 +417,7 @@ ShortestPathQuery<_surface>::dump_path( const std::vector<Point_s>& pathlist )
 template <class _surface>
 void
 ShortestPathQuery<_surface>::set_terminal_point( vertex_descriptor v, 
-						 const Point_s& p )
+						 const Point_s_surf& p )
 {
     point_of_vertex[v] = p;
     boost::clear_vertex( v, graph );
