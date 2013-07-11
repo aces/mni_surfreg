@@ -1,3 +1,7 @@
+2013-07-11 Claude Lepage      <claude@bic.mni.mcgill.ca>
+	* Version 0.6.3
+	* Allow refinement/coarsening of surface map for control mesh
+
 2012-11-16 Tarek Sherif <tsherif@bic.mni.mcgill.ca>
 
         * Version 0.6.2

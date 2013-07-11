@@ -7,10 +7,12 @@
 /* Refine control grid of surface map.
  *
  * Inputs: 
- *    target   geometry must be unit sphere
  *    map      input map
- *    control  (new control mesh), must be 1-to-4 subdivision of 
- *             previous control mesh
+ *    control  (new control mesh), must be 1-to-4, 1-to-1, or
+               4-to-1 subdivision of previous control mesh
+ *    target   (new target mesh), must be 1-to-4, or 1-to-1
+               subdivision of previous target mesh
+ *    output   output map
  *
  */
 
@@ -79,22 +81,38 @@ void compute_refinement( SurfaceMap& smap )
     CGAL::Inverse_index<Surface::Vertex_const_handle>
 	v_index( s.vertices_begin(), s.vertices_end() );
 
-    Surface::size_type size_of_vertices1 = MNI::coarser_size_of_vertices(s);
-
-    // All the existing vertices should have a valid target point.
-    //
+    // Count the exact number of control points in input smap.
+    Surface::size_type smap_control_size = 0;
     Surface::Vertex_const_iterator v = s.vertices_begin();
-    for( Surface::size_type i = 0; i < size_of_vertices1; ++i,++v ) {
-	if ( !is_valid(smap[v]) )
+    CGAL_For_all( v, s.vertices_end() ) {
+      if( is_valid( smap[v] ) ) smap_control_size++;
+    }
+
+    // Allow coarsening of the smap on the number of control points
+    // (one layer at a time).
+    if( smap_control_size == 4*s.size_of_vertices()-6 ) {
+      smap_control_size = s.size_of_vertices();
+    }
+
+    // All the existing vertices should have a valid target point,
+    // unless we are asking to refine the target mesh relative to
+    // the one used to compute the input smap. It's not really 
+    // possible (easily) to coarsen the target mesh.
+    //
+    v = s.vertices_begin();
+    for( Surface::size_type i = 0; i < smap_control_size; ++i,++v ) {
+	if ( !is_valid(smap[v]) ) {
 	    throw std::runtime_error( "expected valid target point" );
+        }
     }
 
     // All new control vertices are assigned new map location.
     // Search neighbours of v for two prexisting vertices (determined
-    // by their indices.  Assign the midpoint of the great circle
+    // by their indices. Assign the midpoint of the great circle
     // to smap[v].
-    //
-    CGAL_For_all( v, s.vertices_end() ) {
+
+    if( smap_control_size < s.size_of_vertices() ) {
+      CGAL_For_all( v, s.vertices_end() ) {
 
 	if ( is_valid(smap[v]) )
 	    throw std::runtime_error( "expected invalid target point" );
@@ -106,7 +124,7 @@ void compute_refinement( SurfaceMap& smap )
 	CGAL_For_all( h, v->vertex_begin() ) {
 
 	    Surface::Vertex_const_handle u = h->opposite()->vertex();
-	    if ( v_index[u] < size_of_vertices1 ) {
+	    if ( v_index[u] < smap_control_size ) {
 		if ( u1 == 0 )
 		    u1 = u;
 		else if ( u2 == 0 )
@@ -119,6 +137,7 @@ void compute_refinement( SurfaceMap& smap )
 	    throw std::runtime_error( "control is not subdivision(3)" );
 	
 	smap[v] = compute_midpoint( smap[u1], smap[u2] );
+      }
     }
 
 }
@@ -161,7 +180,8 @@ int main( int ac, char* av[] )
 
 	cout << "Loading existing map." << endl;
 	std::ifstream is( av[1] );
-	read_surface_map( is, sm, MNI::coarser_size_of_vertices(control) );
+
+	read_surface_map( is, sm, -1 );
 
 	cout << "Refining map." << endl;
 	compute_refinement( sm );

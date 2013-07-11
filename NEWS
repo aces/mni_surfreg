@@ -1,3 +1,7 @@
+		New in Version 0.6.3
+
+* Allow refinement/coarsening of surface map for control mesh
+
 		New in Version 0.6.2
 
 * fixes for gcc 4.6.3

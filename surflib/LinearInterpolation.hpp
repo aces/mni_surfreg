@@ -8,6 +8,7 @@
 #define LINEAR_INTERPOLATION_H
 
 #include <functional>
+#include <iostream>
 
 
 namespace MNI {
@@ -49,6 +50,10 @@ public:
 
 	h = h->next();
 	typename Operation::result_type F0 = f(h->vertex());
+
+//std::cout << "Inter: t1 = " << p.t1() << " t2 = " << p.t2() << " F0 = " << F0 
+//          << " F1 = " << F1 << " F2 = " << F2 << " ret = " 
+//          << p.t0()*F0 + p.t1()*F1 + p.t2()*F2 << std::endl;
 
 	return p.t0()*F0 + p.t1()*F1 + p.t2()*F2;
     }
