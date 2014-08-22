@@ -102,27 +102,30 @@ void optimize_map_gsl( SurfaceMap& smap,
     // Track the search radii.
     MNI::Statistic<double> search_radius_stat;
 
-
     SurfaceMap::ControlMesh::Vertex_iterator v = control.vertices_begin();
     for( int i = 0; v != control.vertices_end(); ++i,++v ) {
 	f.set_vertex(v);
 
+        // penalty radius is the search_radius in the surftracc inputs
 	double penalty_radius_v = penalty_radius[i];
 	double initial_radius_v = initial_radius;
 
 	if ( radius_is_relative ) {
+            // r_near is the distance from v to its nearest connected
+            // neighbour, projected onto the disc tangent to the 
+            // sphere at vertex v.
 	    double r_near = radius_to_nearest_neighbour( smap, v );
 	    penalty_radius_v = std::min( penalty_radius_v * r_near, 1.0 );
 	    initial_radius_v *= penalty_radius_v;
 	}
 
+	f.set_penalty_radius( penalty_radius_v );
 	search_radius_stat.add_sample( penalty_radius_v );
+
 	diag.level(3) << "Starting value: " << f(0,0) << std::endl
 		      << "Search radius set to " << penalty_radius_v
 		      << " (simplex scale = " << initial_radius_v << ")"
 		      << std::endl;
-
-	f.set_penalty_radius( penalty_radius_v );
 
 	/* Set initial iterate x, and step sizes ss */
 	gsl_vector_set_all(x, 0);
@@ -134,32 +137,22 @@ void optimize_map_gsl( SurfaceMap& smap,
 	int num_iter = 0;
 	for( num_iter = 0;
 	     status == GSL_CONTINUE && num_iter < max_num_iter;
-	     ++num_iter ) 
-	{
+	     ++num_iter ) {
 	    // nonzero return value is an error code.
 	    status = gsl_multimin_fminimizer_iterate(s);
-      	    if (status) 
-		break;
+      	    if (status) break;
 
 	    double simplex_size = gsl_multimin_fminimizer_size (s);
 	    status = gsl_multimin_test_size (simplex_size, abs_tol);
 
-	    if (status == GSL_SUCCESS) {
-		diag.level(10) << "converged to minimum at" << endl;
-	    }
-
-	    diag.level(10) << num_iter;
-	    for( int i = 0; i < dimension; ++i) {
-		diag.level(10) << " " << gsl_vector_get (s->x, i);
-	    }
-	    diag.level(10) << " f() = " << s->fval 
-			  << " size = " << simplex_size
-			  << endl;
+	    double x = gsl_vector_get( s->x, 0 );
+	    double y = gsl_vector_get( s->x, 1 );
+	    diag.level(10) << num_iter << " f(" << x << "," << y << ")="
+                           << s->fval << " size = " << simplex_size << endl;
 	}
 
 	double x = gsl_vector_get( s->x, 0 );
 	double y = gsl_vector_get( s->x, 1 );
-	diag.level(3) << "Ending value: " << f(x,y) << std::endl;
 	final[i] = f.target_point(x,y);
 
 	simplex_iterations.add_sample( num_iter );
@@ -174,7 +167,6 @@ void optimize_map_gsl( SurfaceMap& smap,
     MNI::Statistic<double> displacement_magnitude;
     v = control.vertices_begin();
     for( int i = 0; v != control.vertices_end(); ++i,++v ) {
-	//smap.get_target(v) = final[i];
 	set_new_target( smap, v, final[i], displacement_magnitude );
     }
 

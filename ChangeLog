@@ -1,3 +1,10 @@
+2014-08-22 Claude Lepage      <claude@bic.mni.mcgill.ca>
+	* Fix bug in depth_potential for true fwhm for smoothing
+
+2014-03-28 Claude Lepage      <claude@bic.mni.mcgill.ca>
+	* Improve smoothing of surface map
+	* Clarify usage of absolute vs relative neighbourhood radius
+
 2013-07-11 Claude Lepage      <claude@bic.mni.mcgill.ca>
 	* Version 0.6.3
 	* Allow refinement/coarsening of surface map for control mesh

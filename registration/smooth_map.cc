@@ -18,7 +18,7 @@ using namespace std;
  * control vertex v by the weighted sum of v and some neighbourhood
  * centre location:
  *
- *         v + weight * NeighbourhoodCentre(v)
+ *         (1-weight) * v + weight * NeighbourhoodCentre(v)
  *
  * The target surface is assumed to be a sphere.
  * The weighted location is projected back to the sphere.
@@ -30,12 +30,11 @@ void smooth_map( SurfaceMap& smap,
     const SurfaceMap::ControlMesh& control( smap.control_mesh() );
     std::vector<Point_3> t_point( control.size_of_vertices() );
 
-    SurfaceMap::ControlMesh::Vertex_const_iterator 
-	v = control.vertices_begin();
+    SurfaceMap::ControlMesh::Vertex_const_iterator v = control.vertices_begin();
     for( int i = 0; v != control.vertices_end(); ++i,++v ) {
 
 	Vector_3 t_vector = weight * centre(v);
-	t_vector = t_vector + (smap.get_target(v).point() - CGAL::ORIGIN);
+	t_vector = t_vector + (1.0-weight)*(smap.get_target(v).point() - CGAL::ORIGIN);
 	t_vector = t_vector / std::sqrt(CGAL::to_double(t_vector*t_vector));
 
 	t_point[i] = CGAL::ORIGIN + t_vector;

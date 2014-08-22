@@ -821,13 +821,14 @@ private void cot_laplacian_operator( int n_points, Point coords[], struct csr_ma
         vec_sub( coords[i], coords[n2], v3 );
 
         vec_cross( v1, v2, cross );
-        area_tri = 2.0 * sqrt( vec_dot_product( cross, cross ) );
+        area_tri = sqrt( vec_dot_product( cross, cross ) );
 
         Real dot23 = vec_dot_product( v2, v3 ) / area_tri;
         Real dot13 = vec_dot_product( v1, v3 ) / area_tri;
         Real dot12 = vec_dot_product( v1, v2 ) / area_tri;
 
-        // Assemble dot23 at (i,n1), dot13 at (n1,n2), dot12 at (i,n2).
+        // Assemble dot23 at (i,n1) and (n1,i); dot13 at (n1,n2) and (n2,n1);
+        // dot12 at (i,n2) and (n2,i). assemble() is symmetric.
         assemble( dot23, i, n1, mat );
         assemble( dot13, n1, n2, mat );
         assemble( dot12, i, n2, mat );

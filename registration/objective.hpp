@@ -16,7 +16,7 @@ class NeighbourhoodPair
 public:
 
     //! The number of points in the neighbourhood.
-    static const int neighbourhood_size = 25;
+    static const int neighbourhood_size = 1+8+16;   //  +32;
 
     //! Build structure with no mapping.
     NeighbourhoodPair( SurfaceMap& smap, double radius );
@@ -126,7 +126,7 @@ private:
     MNI::LinearInterpolation<Surface,ScalarData> interpolate;
 
     double penalty_radius, penalty_radius_sq;
-    double model_ratio;
+    double model_ratio;  // this is penalty_ratio
 
     // Store sample values for source & target.
     double source_sample[NeighbourhoodPair::neighbourhood_size];
@@ -138,12 +138,14 @@ private:
 //! Compute objective function.
 inline double ObjectiveFunction::operator() ( double x, double y )
 {
+
     double r_sq = x*x + y*y;
     if ( r_sq >= penalty_radius_sq )
 	return std::numeric_limits<double>::max();
 
-    return data_term(x,y) 
-	+ model_ratio * model_term(x,y);
+    // model_ratio is called penalty_ratio in the main program.
+
+    return data_term(x,y) + model_ratio * model_term(x,y);
 }
 
 

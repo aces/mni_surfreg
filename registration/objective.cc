@@ -25,26 +25,44 @@ NeighbourhoodPair::NeighbourhoodPair( SurfaceMap& sm,
 
     // Compute the neighbourhood stencil.
     //
-    CGAL_assertion( neighbourhood_size == 1 + 8 + 16 );
 
     neighbourhood[0] = Point_3(0,0,1);
 
+    double factor = 0.5;
+    if( neighbourhood_size > 1 + 8 + 16 ) factor = 1.0 / 3.0;
+
+    int count = 1;
     double angle = 0;
     double angle_increment = 2.0*M_PI / 8.0;
     for( int i = 0; i < 8; ++i, angle += angle_increment ) {
-	double x = std::cos(angle) * neighbourhood_radius/2.0;
-	double y = std::sin(angle) * neighbourhood_radius/2.0;
+	double x = std::cos(angle) * neighbourhood_radius * factor;
+	double y = std::sin(angle) * neighbourhood_radius * factor;
 	double z = std::sqrt( 1.0 - x*x - y*y );
-	neighbourhood[1+i] = Point_3(x,y,z);
+	neighbourhood[count] = Point_3(x,y,z);
+        count++;
     }
 
     angle = 0;
+    factor += factor;
     angle_increment = 2.0*M_PI / 16.0;
     for( int i = 0; i < 16; ++i, angle += angle_increment ) {
-	double x = std::cos(angle) * neighbourhood_radius;
-	double y = std::sin(angle) * neighbourhood_radius;
+	double x = std::cos(angle) * neighbourhood_radius * factor;
+	double y = std::sin(angle) * neighbourhood_radius * factor;
 	double z = std::sqrt( 1.0 - x*x - y*y );
-	neighbourhood[9+i] = Point_3(x,y,z);
+	neighbourhood[count] = Point_3(x,y,z);
+        count++;
+    }
+
+    if( neighbourhood_size > 1 + 8 + 16 ) {
+      angle = 0;
+      angle_increment = 2.0*M_PI / 32.0;
+      for( int i = 0; i < 32; ++i, angle += angle_increment ) {
+	  double x = std::cos(angle) * neighbourhood_radius;
+	  double y = std::sin(angle) * neighbourhood_radius;
+	  double z = std::sqrt( 1.0 - x*x - y*y );
+	  neighbourhood[count] = Point_3(x,y,z);
+          count++;
+      }
     }
 }
 
@@ -149,9 +167,10 @@ double ObjectiveFunction::data_term( double x, double y )
     }
 
     // Return value in range [0,1], with 0 being optimal match.
-    return 1 - correlation_coefficient( source_sample, 
-					source_sample+NeighbourhoodPair::neighbourhood_size,
-					target_sample );
+
+    return 1.0 - correlation_coefficient( source_sample, 
+    			source_sample+NeighbourhoodPair::neighbourhood_size,
+  			target_sample );
 }
 
 

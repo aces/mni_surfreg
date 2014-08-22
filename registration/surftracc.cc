@@ -65,23 +65,53 @@ struct ComputeCentre_v1
 			       ControlMesh::Vertex_const_handle v )
     {
 	Vector_3 t_vector( CGAL::NULL_VECTOR );
+	double wu_sum = 0;
 
-	ControlMesh::Halfedge_around_vertex_const_circulator 
-	    h = v->vertex_begin();
+	ControlMesh::Halfedge_around_vertex_const_circulator h = v->vertex_begin();
 	CGAL_For_all( h,v->vertex_begin() ) {
 	    t_vector = t_vector +
 		(smap.get_target(h->opposite()->vertex()).point() 
 		 - CGAL::ORIGIN);
+	    wu_sum += 1.0;
 	}
 
-	// FIXME: divide by #neighbours
-	return t_vector;
+	return ( (smap.get_target(v->vertex_begin()->vertex()).point() - CGAL::ORIGIN ) + 
+                 2.0 * t_vector / wu_sum ) / 3.0;
     }
 };
 
 
+/* Returns centroid of 1-ring neighbourhood, weighted by edge length.
+ */
+struct ComputeCentre_v3
+{
+    const Vector_3 operator()( SurfaceMap& smap,
+			       ControlMesh::Vertex_const_handle v )
+    {
+	Vector_3 t_vector( CGAL::NULL_VECTOR );
+	double wu_sum = 0;
+
+	ControlMesh::Halfedge_around_vertex_const_circulator h = v->vertex_begin();
+	CGAL_For_all( h,v->vertex_begin() ) {
+	    Vector_3 d( CGAL::NULL_VECTOR );
+            d = smap.get_target(h->opposite()->vertex()).point() - 
+                smap.get_target(v->vertex_begin()->vertex()).point();
+	    double mag = std::sqrt(CGAL::to_double(d*d));
+
+	    t_vector = t_vector +
+		mag * (smap.get_target(h->opposite()->vertex()).point() - CGAL::ORIGIN);
+
+	    wu_sum += mag;
+	}
+
+	return ( (smap.get_target(v->vertex_begin()->vertex()).point() - CGAL::ORIGIN ) + 
+                 2.0 * t_vector / wu_sum ) / 3.0;
+    }
+};
+
 /* Returns centroid of 1-ring neighbourhood, weighted
  * by relative area of incident facets.
+  * NOTE: This is very very bad. Don't use it. CL.
  */
 struct ComputeCentre_v2 
 {
@@ -143,6 +173,9 @@ void report_displacement_mag( char* prefix,
     for( int i = 0; v != control.vertices_end(); ++i,++v ) {
 	Vector_3 d = smap[v].point() - t_list[i].point();
 	double mag = std::sqrt(CGAL::to_double(d*d));
+// cout << " " << i << " " << smap[v].point().x() << " " << smap[v].point().y()
+//      << " " << smap[v].point().z() << " to " << t_list[i].point().x() << " " 
+//      << t_list[i].point().y() << " " << t_list[i].point().z() << " mag " << mag << endl;
 	displacement.add_sample( mag );
     }
 
@@ -235,12 +268,12 @@ int main( int ac, char* av[] )
 	  "scale of initial optimizer steps" },
 	{ "-absolute_radius", ARGV_CONSTANT, 
 	  (char*)1, (char*)&radius_is_absolute,
-	  "treat radii as absolute values"},
+	  "treat radii as absolute values (do NOT use this option)"},
 
 	// --- Objective Function parameters --- //
 
 	{ "-neighbourhood_radius", ARGV_FLOAT, 0, (char*)&neighbourhood_radius,
-          "radius of texture neighbourhood (max. 1)" },
+          "radius of texture neighbourhood (< 1 if absolute, > 1 if multiplicative factor)" },
 	{ "-penalty_ratio", ARGV_FLOAT, 0, (char*)&penalty_ratio,
           "coefficient of distance penalty term" },
 
@@ -250,7 +283,7 @@ int main( int ac, char* av[] )
 	  ARGV_FLOAT, 0, (char*)&smoothing_neighbour_weight,
           "neighbour weight in smoothing step" },
 	{ "-nc_method", ARGV_INT, 0, (char*)&nc_method,
-	  "neighbourhood centre computation method" },
+	  "neighbourhood centre computation method (always use 1)" },
 
 	// --- Injectivity --- //
 
@@ -332,6 +365,7 @@ int main( int ac, char* av[] )
 
 	ComputeCentre_v1 cc_v1;
 	ComputeCentre_v2 cc_v2;
+	ComputeCentre_v3 cc_v3;
 	NeighbourhoodCentre* nc_ptr = 0;
 
 	switch(nc_method) {
@@ -340,6 +374,9 @@ int main( int ac, char* av[] )
 	    break;
 	case 2: 
 	    nc_ptr = new NC<ComputeCentre_v2>(smap,cc_v2);
+	    break;
+	case 3: 
+	    nc_ptr = new NC<ComputeCentre_v3>(smap,cc_v3);
 	    break;
 	default:
 	    cerr << "Illegal -nc_method value: " << nc_method << endl;
@@ -350,18 +387,33 @@ int main( int ac, char* av[] )
 	// Track the number of nonlinear simplex iterations.
 	MNI::Statistic<double> simplex_iterations;
 
-	if ( !radius_is_absolute ) {
-	    SurfaceMap::ControlMesh::Vertex_const_handle v0
-		= smap.control_mesh().vertices_begin();
-	    SurfaceMap::ControlMesh::Vertex_const_handle v1
-		= v0->halfedge()->opposite()->vertex();
+        // If neighbourhood_radius < 1, assume it's an absolute length.
+        // If it's greater than 1, assume it's a scaling factor so determine
+        // a characteristic length from the average edge length on the 
+        // control sphere. CL.
 
-	    double cos_angle 
-		= std::max( 0.0, (smap.get_source(v0)->point() - CGAL::ORIGIN)
-			    * (smap.get_source(v1)->point() - CGAL::ORIGIN) );
-	    double radius_sq = 1 - cos_angle*cos_angle;
-	    neighbourhood_radius *= std::sqrt(radius_sq);
-	    diag.level(1) << "Neighbourhood radius = " 
+	if ( neighbourhood_radius > 1 ) {
+
+            //  Compute an absolute ngh_radius based on the total area of
+            //  the unit control sphere. Assume isolateral triangles. Determine
+            //  the characteristic edge length. Multiply it by the scaling
+            //  factor given by neighbourhood_radius. Project it on the plane
+            //  parallel to the tangent plane to the control point. CL.
+
+            int n_cells = smap.control_mesh().size_of_facets();
+            double unit_sphere_area = 4.0 * M_PI;  // rad=1.0
+            double avg_control_edge_len = std::sqrt( ( unit_sphere_area / n_cells ) *
+                                                     ( 4.0 / std::sqrt( 3.0 ) ) );
+            neighbourhood_radius *= avg_control_edge_len;
+            if( neighbourhood_radius < M_PI / 2.0 ) {
+                // the arclength is r*angle, r=1, so neighbourhood_radius is
+                // an angle in radians.
+                neighbourhood_radius = std::sin( neighbourhood_radius );
+            } else {
+                neighbourhood_radius = 0.99;
+            }
+
+	    diag.level(1) << "Absolute neighbourhood radius = " 
 			  << neighbourhood_radius << endl;
 	}
 
