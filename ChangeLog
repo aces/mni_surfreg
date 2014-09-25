@@ -1,4 +1,7 @@
 2014-08-22 Claude Lepage      <claude@bic.mni.mcgill.ca>
+	* Added sphere_resample_obj to the tools
+
+2014-08-22 Claude Lepage      <claude@bic.mni.mcgill.ca>
 	* Fix bug in depth_potential for true fwhm for smoothing
 
 2014-03-28 Claude Lepage      <claude@bic.mni.mcgill.ca>

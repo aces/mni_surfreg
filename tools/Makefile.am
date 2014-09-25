@@ -22,12 +22,15 @@ bin_PROGRAMS = \
 	surface-resample \
 	surface-stats
 
+bin_SCRIPTS = sphere_resample_obj
+
 TESTS = t_alpha_shape t_surface_distance_transform
 
 # Common include file
-EXTRA_DIST = Surface.hpp t_alpha_shape.sh t_surface_distance_transform.sh
+EXTRA_DIST = Surface.hpp t_alpha_shape.sh t_surface_distance_transform.sh \
+             sphere_resample_obj.in
 
-CLEANFILES = t_alpha_shape t_surface_distance_transform
+CLEANFILES = t_alpha_shape t_surface_distance_transform sphere_resample_obj
 
 alpha_shape_SOURCES = alpha-shape.cc
 depth_potential_SOURCES = depth_potential.c
@@ -45,7 +48,7 @@ surface_map_stats_SOURCES = surface-map-stats.cc
 surface_resample_SOURCES = surface-resample.cc
 surface_stats_SOURCES = surface-stats.cc
 
-SUFFIXES = .sh
+SUFFIXES = .sh .in
 .sh:
 	@rm -f $@
 	sed < $< > $@-t \
@@ -53,3 +56,14 @@ SUFFIXES = .sh
 	    -e 's,xBICOBJ2VTK_PATHx,$(BICOBJ2VTK_PATH),g'
 	@chmod +x $@-t
 	mv $@-t $@
+
+.in:
+	@rm -f $@
+	sed < $< > $@-t \
+	    -e 's,xPERLx,$(PERL),g' \
+	    -e 's,xINCDIRx,$(pkgdatadir),g' \
+	    -e 's,xBINDIRx,$(bindir),g' \
+	    -e 's,xVERSIONx,$(VERSION),g'
+	chmod +x $@-t
+	mv $@-t $@
+
