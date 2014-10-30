@@ -71,7 +71,7 @@ Spawn(['cp', '-f', $map,$map_final]);
 sub get_num_faces {
     my $vv_file = shift;
     my $out;
-    Spawn([ 'wc', '-l', $vv_file ], stdout => \$out );
+    Spawn([ 'wc', '-l', $vv_file ], verbose => 0, stdout => \$out );
 
     return 81920 unless $Execute;
 
